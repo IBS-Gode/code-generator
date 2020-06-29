@@ -7,6 +7,7 @@ A code generator with an edge
 ## Requirement
 - Java 11
 - Node 11 as default (node -v should start with v11)
+- MySQL database (give credentials in application.properties)
 
 ## How to build
 
