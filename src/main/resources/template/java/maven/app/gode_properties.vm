@@ -89,3 +89,4 @@ gode.security.token.salt=
 
 spring.application.name=${appName}-v.$appVersion
 spring.boot.admin.client.url=${admin.url}
+management.endpoint.logfile.external-file=./logs/${appName}.log
