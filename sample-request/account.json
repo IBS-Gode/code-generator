@@ -21,6 +21,14 @@
           "INDEX"
         ],
         "type": "NUMBER"
+      },
+      {
+        "description": "Account Totem No",
+        "name": "totemNo",
+        "properties": [
+          "INDEX"
+        ],
+        "type": "SEQUENCE"
       }
     ],
     "idField": {

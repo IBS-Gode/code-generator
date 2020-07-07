@@ -59,7 +59,7 @@ public class CodeObjectField  extends ManagedIdentifiedObject implements Resolve
             case TEXT:
             case LONG_TEXT:
                 return new JavaObject(name, "String", StringUtils.EMPTY);
-            case NUMBER:
+            case NUMBER: case SEQUENCE:
                 return new JavaObject(name, "Long", StringUtils.EMPTY);
             case HIGH_PRECISION_NUMBER:
                 return new JavaObject(name, "BigInteger", "java.math");

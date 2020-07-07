@@ -64,4 +64,16 @@ import org.ibs.cds.gode.entity.cache.CacheEntity;
     public void setId($idFieldType $idFieldName){
         this.$idFieldName = $idFieldName;
     }
+
+    #if($ENTITY.sequenceFieldsAvailable)
+    public java.util.Optional<AutoIncrementField[]> userIncrementFields(){
+        #set($seq_fields =  ${ENTITY.getAutoSequenceFieldList()})
+        return java.util.Optional.of(new AutoIncrementField[]{
+        #foreach($seq_field in $seq_fields)
+            #set($fieldName = ${StringUtils.capitalize(${seq_field.getObject().getName()})})
+            AutoIncrementField.of(this::get${fieldName}, this::set${fieldName}),
+        #end
+        });
+     }
+    #end
 }

@@ -9,7 +9,7 @@ public class GraphQLUtil {
     public  static String getGrapQLType(EntityField field){
        switch (field.getType()){
            case LONG_TEXT: case TEXT: return "String";
-           case NUMBER:case HIGH_PRECISION_NUMBER: return "Int";
+           case NUMBER:case SEQUENCE: case HIGH_PRECISION_NUMBER: return "Int";
            case DECIMAL: case HIGH_PRECISION_DECIMAL: return "Float";
            case BOOLEAN: return "Boolean";
            case RELATIONSHIP: return field.getRelationship().getName();
@@ -22,7 +22,7 @@ public class GraphQLUtil {
     public  static String getPrimitiveGrapQLType(FieldType type){
         switch (type){
             case LONG_TEXT: case TEXT: return "String";
-            case NUMBER:case HIGH_PRECISION_NUMBER: return "Int";
+            case NUMBER:case SEQUENCE: case HIGH_PRECISION_NUMBER: return "Int";
             case DECIMAL: case HIGH_PRECISION_DECIMAL: return "Float";
             case BOOLEAN: return "Boolean";
         }

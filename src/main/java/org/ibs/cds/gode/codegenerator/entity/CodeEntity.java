@@ -27,6 +27,7 @@ public class CodeEntity extends Specification implements Buildable, CodeGenerati
     private BuildModel buildModel;
     private List<CodeEntityField> viewFields;
     private String viewName;
+    private boolean sequenceFieldsAvailable;
 
     public CodeEntity(StatefulEntitySpec userProvided, BuildModel buildModel, Map<Long, EntityStorePolicy> entityStorePolicyMap) {
         this.setName(userProvided.getName());
@@ -45,6 +46,7 @@ public class CodeEntity extends Specification implements Buildable, CodeGenerati
             this.viewFields = new ArrayList();
         }
         this.viewFields.addAll(fields);
+        this.sequenceFieldsAvailable = this.fields.stream().anyMatch(CodeEntityField::isAutosequence);
     }
 
     @Override
@@ -57,6 +59,11 @@ public class CodeEntity extends Specification implements Buildable, CodeGenerati
         return fields == null ? Collections.emptyList() : fields.stream()
                 .filter(k->k.getField().getType() == FieldType.OBJECT)
                 .map(k->k.getObjectField()).collect(Collectors.toList());
+    }
+
+    @JsonIgnore
+    public List<CodeEntityField> getAutoSequenceFieldList(){
+        return this.fields.stream().filter(CodeEntityField::isAutosequence).collect(Collectors.toList());
     }
 
 }

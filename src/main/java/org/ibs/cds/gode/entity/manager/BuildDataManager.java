@@ -17,10 +17,8 @@ public class BuildDataManager extends PureEntityManager< BuildData, Long> {
         super(repo,null);
     }
 
-
-
     public BuildData findLatestBuild(String appName, Long appVersion){
-        BuildDataRepository repo = repository.get();
+        BuildDataRepository repo = super.repository.get();
         return repo.findLatestBuild(appName, appVersion);
     }
 

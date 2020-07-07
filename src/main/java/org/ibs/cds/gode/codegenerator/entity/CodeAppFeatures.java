@@ -15,6 +15,7 @@ public class CodeAppFeatures {
     private final boolean relationshipEntityIncluded;
     private final boolean queueSystemRequired;
     private final boolean secure;
+    private final boolean autosequenceFields;
 
     public CodeAppFeatures(CodeApp app) {
         this.cacheRequired = isCacheRequired(app);
@@ -28,6 +29,7 @@ public class CodeAppFeatures {
         this.queueSystemRequired = app.isSystemQueue() ||
                 app.getEntities().stream().anyMatch(k -> k.getStorePolicy().isAsync());
         this.secure = app.isSecure();
+        this.autosequenceFields = app.getEntities().stream().flatMap(k->k.getFields().stream()).anyMatch(CodeEntityField::isAutosequence);
     }
 
     private boolean isCacheRequired(CodeApp app) {

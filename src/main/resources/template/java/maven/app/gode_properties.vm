@@ -9,10 +9,10 @@ gode.datastore.jpa.dialect=
 gode.datastore.jpa.datasource.url=
 gode.datastore.jpa.datasource.username=
 gode.datastore.jpa.datasource.password=
-gode.datastore.jpa.datasource.auto-schema-management=validate
+gode.datastore.jpa.datasource.auto-schema-management=create-update
 
 #Liquibase
-spring.liquibase.enabled=true
+spring.liquibase.enabled=false
 spring.liquibase.change-log=classpath:liquibase-diff-changeLog.yml
 #else
 gode.datastore.jpa.enabled=false
