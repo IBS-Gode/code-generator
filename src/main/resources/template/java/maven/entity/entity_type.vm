@@ -71,7 +71,7 @@ import org.ibs.cds.gode.entity.cache.CacheEntity;
         return java.util.Optional.of(new AutoIncrementField[]{
         #foreach($seq_field in $seq_fields)
             #set($fieldName = ${StringUtils.capitalize(${seq_field.getObject().getName()})})
-            AutoIncrementField.of(this::get${fieldName}, this::set${fieldName}),
+            AutoIncrementField.of("${seq_field.getObject().getName()}",this::get${fieldName}, this::set${fieldName}),
         #end
         });
      }
