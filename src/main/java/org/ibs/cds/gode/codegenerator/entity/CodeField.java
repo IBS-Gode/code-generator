@@ -15,8 +15,10 @@ import org.jetbrains.annotations.NotNull;
 
 @Data
 public class CodeField implements ResolvedFromModel<EntityField, LangObject> {
+
     private LangObject object;
     private String graphQLType;
+    private boolean sequence;
 
     public CodeField(EntityField field,BuildModel buildModel) {
         Assert.notNull(field);
@@ -29,6 +31,7 @@ public class CodeField implements ResolvedFromModel<EntityField, LangObject> {
         String name = field.getName();
         FieldType type = field.getType();
         Assert.notNull("FieldType and BuildModel cannot be empty",type, buildModel);
+        if(field.getType() == FieldType.SEQUENCE) this.sequence = true;
         switch (buildModel.getProgLanguage()){
             case JAVA: return getJavaObject(field, name, type);
             default: throw CodeGenerationFailure.LANGUAGE_NOT_FOUND.provide(buildModel.getProgLanguage());
@@ -42,7 +45,7 @@ public class CodeField implements ResolvedFromModel<EntityField, LangObject> {
             case DATE: return new JavaObject(name, "Date", "java.util");
             case BOOLEAN: return new JavaObject(name, "Boolean", StringUtils.EMPTY);
             case TEXT: case LONG_TEXT: return new JavaObject(name, "String", StringUtils.EMPTY);
-            case NUMBER: return new JavaObject(name, "Long", StringUtils.EMPTY);
+            case NUMBER: case SEQUENCE: return new JavaObject(name, "Long", StringUtils.EMPTY);
             case HIGH_PRECISION_NUMBER: return new JavaObject(name, "BigInteger","java.math");
             case DECIMAL: return new JavaObject(name, "Double", StringUtils.EMPTY);
             case HIGH_PRECISION_DECIMAL: return new JavaObject(name, "BigDecimal", "java.math");

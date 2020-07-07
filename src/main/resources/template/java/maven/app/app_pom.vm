@@ -49,6 +49,14 @@
             <version>${gode.version}</version>
         </dependency>
 
+        #if($APP.features.cacheRequired)
+         <dependency>
+             <groupId>$DEFAULT_GROUP_ID.value</groupId>
+            <artifactId>gode-cache</artifactId>
+            <version>${gode.version}</version>
+        </dependency>
+        #end
+
         #if(${APP.secure})
             <dependency>
                 <groupId>$DEFAULT_GROUP_ID.value</groupId>
@@ -56,6 +64,7 @@
                 <version>${gode.version}</version>
             </dependency>
         #end
+
         #foreach($entity in $APP.entities)
         <dependency>
             <groupId>$DEFAULT_GROUP_ID.value</groupId>
@@ -69,12 +78,14 @@
                 <artifactId>${dependency.getName().toLowerCase()}</artifactId>
             </dependency>
         #end
+
         #foreach($relationship in $APP.relationships)
             <dependency>
                 <groupId>$DEFAULT_GROUP_ID.value</groupId>
                 <artifactId>${relationship.getName().toLowerCase()}</artifactId>
             </dependency>
         #end
+
         <dependency>
             <groupId>$DEFAULT_GROUP_ID.value</groupId>
             <artifactId>$appFunctionName</artifactId>
@@ -87,6 +98,39 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <!-- liquibase -->
+            #if($APP.features.jpaStoreRequired)
+           <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>${liquibase.version}</version>
+                <configuration>
+                    <propertyFile>src/main/resources/liquibase.properties</propertyFile>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.liquibase.ext</groupId>
+                        <artifactId>liquibase-hibernate5</artifactId>
+                        <version>${liquibase-hibernate5.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-beans</artifactId>
+                        <version>${spring.framework.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.springframework.data</groupId>
+                        <artifactId>spring-data-jpa</artifactId>
+                        <version>${spring.jpa.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>javax.validation</groupId>
+                        <artifactId>validation-api</artifactId>
+                        <version>2.0.1.Final</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            #end
         </plugins>
     </build>
 </project>

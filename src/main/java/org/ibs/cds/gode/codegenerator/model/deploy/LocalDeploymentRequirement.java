@@ -6,7 +6,6 @@ import lombok.Setter;
 import org.ibs.cds.gode.codegenerator.config.CodeGenerationComponent;
 import org.ibs.cds.gode.codegenerator.entity.CodeApp;
 import org.ibs.cds.gode.codegenerator.entity.CodeAppUtil;
-import org.ibs.cds.gode.entity.store.StoreType;
 import org.ibs.cds.gode.entity.type.FieldType;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,24 +20,34 @@ import java.util.stream.Stream;
 import static org.ibs.cds.gode.codegenerator.model.deploy.Action.of;
 
 public enum LocalDeploymentRequirement {
-    ADMIN_PORT(c -> true, "Monitor app port","adminPort", FieldType.NUMBER,
+    ADMIN_PORT(always(), "Monitor app port","adminPort", FieldType.NUMBER,
             of(CodeGenerationComponent.ComponentName.ADMIN, "server.port"),
             of(CodeGenerationComponent.ComponentName.APP, "spring.boot.admin.client.url", adminUrl())),
 
     JPA_DRIVER(requireJPA(), "JPA Driver","jpaDriver", FieldType.TEXT,
-            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.jpa.driver")),
+            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.jpa.driver"),
+            of(CodeGenerationComponent.ComponentName.APP_MIGRATION, "driver")
+    ),
 
     JPA_DIALECT(requireJPA(), "JPA Dialect","jpaDialect", FieldType.TEXT,
-            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.jpa.dialect")),
+            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.jpa.dialect"),
+            of(CodeGenerationComponent.ComponentName.APP_MIGRATION, "referenceUrl", migrationSearch())
+    ),
 
     JPA_URL(requireJPA(), "JPA Database url","jpaUrl", FieldType.TEXT,
-            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.jpa.datasource.url")),
+            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.jpa.datasource.url"),
+            of(CodeGenerationComponent.ComponentName.APP_MIGRATION, "url")
+    ),
 
     JPA_USERNAME(requireJPA(), "JPA Database username", "jpaUsername", FieldType.TEXT,
-            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.jpa.datasource.username")),
+            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.jpa.datasource.username"),
+            of(CodeGenerationComponent.ComponentName.APP_MIGRATION, "username")
+    ),
 
     JPA_PASSWORD(requireJPA(), "JPA Database password","jpaPassword", FieldType.TEXT,
-            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.jpa.datasource.password")),
+            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.jpa.datasource.password"),
+            of(CodeGenerationComponent.ComponentName.APP_MIGRATION, "password")
+    ),
 
     MONGODB_URI(requireMongoDB(), "MongoDB URI","mongoUri", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.mongodb.uri")),
@@ -46,10 +55,10 @@ public enum LocalDeploymentRequirement {
     MONGODB_DATABASE(requireMongoDB(), "MongoDB useername","mongoDatabaseName", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.mongodb.database.name")),
 
-    APP_PORT(c -> true, "Application port","appPort", FieldType.NUMBER,
+    APP_PORT(always(), "Application port","appPort", FieldType.NUMBER,
             of(CodeGenerationComponent.ComponentName.APP, "server.port")),
 
-    MEDIA_SERVER_LOC(c -> true, "Media server directory","mediaServer", FieldType.TEXT,
+    MEDIA_SERVER_LOC(always(), "Media server directory","mediaServer", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.media.store.location")),
 
     QUEUE_PREFIX(requireQueueServer(), "Prefix for queue name","queuePrefix", FieldType.TEXT,
@@ -74,6 +83,10 @@ public enum LocalDeploymentRequirement {
             of(CodeGenerationComponent.ComponentName.APP, "gode.queue.kafka.security.jaas")),
 
     ;
+
+    private static Function<LocalDeploymentRequirement, Function<CodeApp, String>> migrationSearch() {
+        return  requirement -> codeApp -> "hibernate:spring:org.ibs.cds.gode.entity.type?dialect=".concat(requirement.getValue());
+    }
 
     private final Predicate<CodeApp> entryCriteria;
     private @Getter
@@ -100,17 +113,22 @@ public enum LocalDeploymentRequirement {
 
     @NotNull
     private static Predicate<CodeApp> requireJPA() {
-        return c -> DeploymentRequirement.getStoreRequirements(c).containsKey(StoreType.JPA);
+        return c -> c.getFeatures().isJpaStoreRequired();
     }
 
     @NotNull
     private static Predicate<CodeApp> requireMongoDB() {
-        return c -> DeploymentRequirement.getStoreRequirements(c).containsKey(StoreType.MONGODB);
+        return c -> c.getFeatures().isMongoRequired();
     }
 
     @NotNull
     private static Predicate<CodeApp> requireQueueServer() {
-        return c -> c.isSystemQueue() || DeploymentRequirement.isQueueManagerNeeded(DeploymentRequirement.getStoreRequirements(c));
+        return c -> c.getFeatures().isQueueSystemRequired();
+    }
+
+    @NotNull
+    private static Predicate<CodeApp> always() {
+        return c -> true;
     }
 
     @JsonIgnore

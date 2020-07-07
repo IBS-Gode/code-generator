@@ -10,5 +10,6 @@ public enum FieldType {
     OBJECT,
     DATE,
     BOOLEAN,
-    RELATIONSHIP
+    RELATIONSHIP,
+    SEQUENCE
 }

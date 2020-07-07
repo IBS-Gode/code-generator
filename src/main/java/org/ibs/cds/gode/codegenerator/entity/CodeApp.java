@@ -22,6 +22,7 @@ public class CodeApp extends Specification implements Buildable, CodeGenerationC
     private App model;
     private BuildModel buildModel;
     private Set<CodeEntity> dependencies;
+    private CodeAppFeatures features;
     private boolean secure;
     private boolean systemQueue;
 
@@ -49,6 +50,7 @@ public class CodeApp extends Specification implements Buildable, CodeGenerationC
         }else{
             this.relationships = Collections.emptySet();
         }
+        this.features = new CodeAppFeatures(this);
     }
 
     public Map<Long,EntityStorePolicy> resolveEntityStorePolicy(BuildModel buildModel){

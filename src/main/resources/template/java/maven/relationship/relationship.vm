@@ -23,10 +23,6 @@ configuration:
     path: ${DEFAULT__ENTITY_MANAGER_DIRECTORY.pathOf($projectName,$relationship_lc,$javaPath)}
     template: relationship_manager.vm
     buildable: false
-##  - name: ${relationship}ProcessController.java
-##    path: ${DEFAULT__ENTITY_CONTROLLER_DIRECTORY.pathOf($projectName,$relationship_lc,$javaPath)}
-##    template: relationship_view_controller.vm
-##    buildable: false
   - name: ${relationship}StoreRepo.java
     path: ${DEFAULT__ENTITY_REPO_DIRECTORY.pathOf($projectName,$relationship_lc,$javaPath)}
     template: relationship_repo.vm

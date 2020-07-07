@@ -1,21 +1,26 @@
 #set($appName=${APP.getName().toLowerCase()})
 #set($appVersion=${APP.getVersion()})
-#set($storeRequirement=${DeploymentRequirement.getStoreRequirements($APP)})
 
-#if($storeRequirement.containsKey($StoreType.valueOf("JPA")))
+#if(${APP.features.jpaStoreRequired})
+#JPA
 gode.datastore.jpa.enabled=true
 gode.datastore.jpa.driver=
 gode.datastore.jpa.dialect=
 gode.datastore.jpa.datasource.url=
 gode.datastore.jpa.datasource.username=
 gode.datastore.jpa.datasource.password=
-gode.datastore.jpa.datasource.auto-schema-management=update
+gode.datastore.jpa.datasource.auto-schema-management=validate
+
+#Liquibase
+spring.liquibase.enabled=true
+spring.liquibase.change-log=classpath:liquibase-diff-changeLog.yml
 #else
 gode.datastore.jpa.enabled=false
 #end
 
 
-#if($storeRequirement.containsKey($StoreType.valueOf("MONGODB")))
+#if(${APP.features.mongoRequired})
+#Mongo
 gode.datastore.mongodb.enabled=true
 gode.datastore.mongodb.uri=
 gode.datastore.mongodb.database.name=
@@ -23,7 +28,8 @@ gode.datastore.mongodb.database.name=
 gode.datastore.mongodb.enabled=false
 #end
 
-#if(${APP.systemQueue} || $DeploymentRequirement.isQueueManagerNeeded($storeRequirement))
+#if(${APP.features.queueSystemRequired})
+#QueueManagement
 gode.queue.kafka.enabled=true
 gode.queue.general=
 gode.queue.kafka.servers=
@@ -46,7 +52,8 @@ gode.queue.kafka.enabled=false
 #end
 
 
-#if(${APP.secure})
+#if(${APP.features.secure})
+#Auth
 gode.security.jwt.public-key= classpath:public.txt
 gode.security.enabled=true
 #else
@@ -55,7 +62,8 @@ gode.security.enabled=false
 
 
 
-#if($DeploymentRequirement.isCacheNeeded($storeRequirement))
+#if(${APP.features.cacheRequired})
+#Cache
 gode.cache.ignite.enabled=true
 gode.cache.ignite.name=${appName}cache
 gode.cache.ignite.persistence=true
@@ -78,14 +86,11 @@ gode.cache.ignite.enabled=false
 
 server.port=
 
+#Monitor
 management.endpoint.metrics.enabled=true
 management.endpoints.web.exposure.include=*
 management.endpoint.prometheus.enabled=true
 management.metrics.export.prometheus.enabled=true
-
-gode.security.token.access.expiry=
-gode.security.token.refresh.expiry=
-gode.security.token.salt=
 
 spring.application.name=${appName}-v.$appVersion
 spring.boot.admin.client.url=${admin.url}

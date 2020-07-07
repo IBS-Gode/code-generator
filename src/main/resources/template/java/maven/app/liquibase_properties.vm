@@ -1,0 +1,7 @@
+url=
+diffChangeLogFile=src/main/resources/liquibase-diff-changeLog.yml
+driver=
+username=
+password=
+referenceUrl=hibernate:spring:org.ibs.cds.gode.entity.type?dialect=
+changeLogFile=classpath:liquibase-changeLog.yml

@@ -39,3 +39,9 @@ configuration:
     template: public_sample_key.vm
     buildable: false
 #end
+#if(${APP.features.jpaStoreRequired})
+  - name: liquibase.properties
+    path: ${PathPackage.path($projectName,$appName, $resourcePath)}
+    template: liquibase_properties.vm
+    buildable: false
+#end
