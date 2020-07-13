@@ -36,9 +36,15 @@ import org.ibs.cds.gode.entity.cache.CacheEntity;
 @Data
 #if($storedEntity && $isCached)
     public class $entityGivenName extends $storeEssentials.entityType.name<$idFieldType> implements CacheableEntity<$idFieldType> {
+        #if($storeEssentials && $storeEssentials.isCassandra())
+             @org.springframework.data.cassandra.core.mapping.Column
+        #end
         private @$storeEssentials.idAnnotation.name @KeyId $idFieldType $idFieldName;
 #elseif($storedEntity)
     public class $entityGivenName extends $storeEssentials.entityType.name<$idFieldType> {
+        #if($storeEssentials && $storeEssentials.isCassandra())
+                     @org.springframework.data.cassandra.core.mapping.Column
+        #end
         private @$storeEssentials.idAnnotation.name $idFieldType $idFieldName;
 #elseif($isCached)
     public class $entityGivenName extends CacheEntity<$idFieldType> {
@@ -51,9 +57,13 @@ import org.ibs.cds.gode.entity.cache.CacheEntity;
     #foreach($field in $ENTITY.fields)
         #set($fieldName = $field.getObject().getName())
         #set($fieldType = $field.getObject().getFQN())
-     #if($field.objectField && $storeEssentials.isJPA())
-     @javax.persistence.Embedded
-     #end
+         #if($field.objectField && $storeEssentials.isJPA())
+         @javax.persistence.Embedded
+         #end
+     #if($storeEssentials && $storeEssentials.isCassandra())
+     $storeEssentials.isCassandra()
+         @org.springframework.data.cassandra.core.mapping.Column
+      #end
     private $fieldType $fieldName;
     #end
 

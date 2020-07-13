@@ -23,6 +23,18 @@ gode.datastore.mongodb.database.name=
 gode.datastore.mongodb.enabled=false
 #end
 
+#if($storeRequirement.containsKey($StoreType.valueOf("CASSANDRA")))
+gode.datastore.cassandra.enabled=true
+gode.datastore.cassandra.contact-points=
+gode.datastore.cassandra.port=
+gode.datastore.cassandra.username=
+gode.datastore.cassandra.password=
+gode.datastore.cassandra.keyspace=default
+gode.datastore.cassandra.schema-action=NONE
+#else
+gode.datastore.cassandra.enabled=false
+#end
+
 #if(${APP.systemQueue} || $DeploymentRequirement.isQueueManagerNeeded($storeRequirement))
 gode.queue.kafka.enabled=true
 gode.queue.general=
@@ -89,3 +101,4 @@ gode.security.token.salt=
 
 spring.application.name=${appName}-v.$appVersion
 spring.boot.admin.client.url=${admin.url}
+management.endpoint.logfile.external-file=./logs/${appName}.log

@@ -46,6 +46,18 @@ public enum LocalDeploymentRequirement {
     MONGODB_DATABASE(requireMongoDB(), "MongoDB useername","mongoDatabaseName", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.mongodb.database.name")),
 
+    CASSANDRA_PORT(requireCassandra(), "Cassandra port","cassandraPort", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.APP, "spring.data.cassandra.port")),
+
+    CASSANDRA_USERNAME(requireCassandra(), "Cassandra username","cassandraUsername", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.APP, "spring.data.cassandra.username")),
+
+    CASSANDRA_PASSWORD(requireCassandra(), "Cassandra username","cassandraPassword", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.APP, "spring.data.cassandra.password")),
+
+    CASSANDRA_URI(requireCassandra(), "Cassandra URI", "cassandraContactPoint", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.APP, "spring.data.cassandra.contact-points")),
+
     APP_PORT(c -> true, "Application port","appPort", FieldType.NUMBER,
             of(CodeGenerationComponent.ComponentName.APP, "server.port")),
 
@@ -72,6 +84,39 @@ public enum LocalDeploymentRequirement {
 
     QUEUE_SECURITY_MECHANISM_JAAS(requireQueueServer(), "Queue Security Configuration","queueSecurityMechanismJaas", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.queue.kafka.security.jaas")),
+
+    MAIL_SMTP_SERVER(c -> true, "SMTP Mail Server","smtpServer", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.ADMIN, "spring.mail.host")),
+
+    MAIL_SMTP_PORT(c -> true, "SMTP Mail Port","smtpPort", FieldType.NUMBER,
+            of(CodeGenerationComponent.ComponentName.ADMIN, "spring.mail.port")),
+
+    MAIL_USERNAME(c -> true, "SMTP Mail Username","mailUsername", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.ADMIN, "spring.mail.username")),
+
+    MAIL_PASSWORD(c -> true, "SMTP Mail Password","mailPassword", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.ADMIN, "spring.mail.password")),
+
+    MAIL_NOTIFICATION_ENABLE(c -> true, "Mail Notification Enable","mailNotifyEnable", FieldType.BOOLEAN,
+            of(CodeGenerationComponent.ComponentName.ADMIN, "spring.boot.admin.notify.mail.enabled")),
+
+    MAIL_NOTIFICATION_SENDER(c -> true, "Mail Notification Sender","mailSender", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.ADMIN, "spring.boot.admin.notify.mail.from")),
+
+    MAIL_NOTIFICATION_RECEIVER(c -> true, "Mail Notification Receiver","mailReceiver", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.ADMIN, "spring.boot.admin.notify.mail.to")),
+
+    SLACK_NOTIFICATION_ENABLE(c -> true, "Slack Notification Enable","slackNotifyEnable", FieldType.BOOLEAN,
+            of(CodeGenerationComponent.ComponentName.ADMIN, "spring.boot.admin.notify.ms-teams.enabled")),
+
+    SLACK_NOTIFICATION_WEBHOOKS_URL(c -> true, "Slack Notification Webhooks Url","slackWebhooksUrl", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.ADMIN, "spring.boot.admin.notify.ms-teams.webhook-url")),
+
+    TEAMS_NOTIFICATION_ENABLE(c -> true, "Teams Notification Enable","teamsNotifyEnable", FieldType.BOOLEAN,
+            of(CodeGenerationComponent.ComponentName.ADMIN, "spring.boot.admin.notify.slack.enabled")),
+
+    TEAMS_NOTIFICATION_WEBHOOKS_URL(c -> true, "Teams Notification Webhooks Url","teamsWebhooksUrl", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.ADMIN, "spring.boot.admin.notify.slack.webhook-url")),
 
     ;
 
@@ -101,6 +146,11 @@ public enum LocalDeploymentRequirement {
     @NotNull
     private static Predicate<CodeApp> requireJPA() {
         return c -> DeploymentRequirement.getStoreRequirements(c).containsKey(StoreType.JPA);
+    }
+
+    @NotNull
+    private static Predicate<CodeApp> requireCassandra() {
+        return c -> DeploymentRequirement.getStoreRequirements(c).containsKey(StoreType.CASSANDRA);
     }
 
     @NotNull

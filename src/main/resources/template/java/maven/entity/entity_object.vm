@@ -8,10 +8,19 @@
 package $DEFAULT__ENTITY_TYPE_DIRECTORY.value;
 
 import lombok.Data;
+if($storeEssentials && $storeEssentials.isCassandra())
+import org.springframework.data.cassandra.core.mapping.Column;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.Table;
+#end
 
 @Data
 #if($storeEssentials && $storeEssentials.isJPA())
 @javax.persistence.Embeddable
+#end
+
+#if($storeEssentials && $storeEssentials.isCassandra())
+@Table("$object.name")
 #end
 public class $object.name {
 
@@ -19,6 +28,9 @@ public class $object.name {
     #foreach($objField in $object.fields)
         #set($fieldName = $objField.getName())
         #set($fieldType = $objField.getFQN())
+    #if($storeEssentials && $storeEssentials.isCassandra())
+    @Column
+    #end
     private $fieldType $fieldName;
     #end
 }
