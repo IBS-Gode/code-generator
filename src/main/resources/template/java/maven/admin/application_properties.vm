@@ -7,3 +7,21 @@ spring.boot.admin.ui.brand=<img src="assets/img/icon-spring-boot-admin.svg"><spa
 spring.boot.admin.context-path=$adminAppName
 
 server.port=9999
+
+spring.mail.host =
+spring.mail.port =
+spring.mail.username =
+spring.mail.password =
+spring.mail.properties.mail.smtp.auth = true
+spring.mail.properties.mail.smtp.starttls.enable = true
+#SBA Mail Configuration
+spring.boot.admin.notify.mail.enabled =
+spring.boot.admin.notify.mail.from =
+spring.boot.admin.notify.mail.to =
+
+spring.boot.admin.notify.ms-teams.enabled=
+spring.boot.admin.notify.ms-teams.webhook-url=
+
+spring.boot.admin.notify.slack.enabled=
+spring.boot.admin.notify.slack.webhook-url=
+spring.boot.admin.notify.slack.message=*#{instance.registration.name}* (#{instance.id}) is *#{event.statusInfo.status}*
