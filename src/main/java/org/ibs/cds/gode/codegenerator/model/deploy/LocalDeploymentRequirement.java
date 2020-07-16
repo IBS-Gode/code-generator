@@ -20,72 +20,54 @@ import java.util.stream.Stream;
 import static org.ibs.cds.gode.codegenerator.model.deploy.Action.of;
 
 public enum LocalDeploymentRequirement {
-    ADMIN_PORT(always(), "Monitor app port","adminPort", FieldType.NUMBER,
+    ADMIN_PORT(always(), "Monitor app port", "adminPort", FieldType.NUMBER,
             of(CodeGenerationComponent.ComponentName.ADMIN, "server.port"),
             of(CodeGenerationComponent.ComponentName.APP, "spring.boot.admin.client.url", adminUrl())),
-
-    JPA_DRIVER(requireJPA(), "JPA Driver","jpaDriver", FieldType.TEXT,
+    JPA_DRIVER(requireJPA(), "JPA Driver", "jpaDriver", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.jpa.driver"),
             of(CodeGenerationComponent.ComponentName.APP_MIGRATION, "driver")
     ),
-
-    JPA_DIALECT(requireJPA(), "JPA Dialect","jpaDialect", FieldType.TEXT,
+    JPA_DIALECT(requireJPA(), "JPA Dialect", "jpaDialect", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.jpa.dialect"),
             of(CodeGenerationComponent.ComponentName.APP_MIGRATION, "referenceUrl", migrationSearch())
     ),
-
-    JPA_URL(requireJPA(), "JPA Database url","jpaUrl", FieldType.TEXT,
+    JPA_URL(requireJPA(), "JPA Database url", "jpaUrl", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.jpa.datasource.url"),
             of(CodeGenerationComponent.ComponentName.APP_MIGRATION, "url")
     ),
-
     JPA_USERNAME(requireJPA(), "JPA Database username", "jpaUsername", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.jpa.datasource.username"),
             of(CodeGenerationComponent.ComponentName.APP_MIGRATION, "username")
     ),
-
-    JPA_PASSWORD(requireJPA(), "JPA Database password","jpaPassword", FieldType.TEXT,
+    JPA_PASSWORD(requireJPA(), "JPA Database password", "jpaPassword", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.jpa.datasource.password"),
             of(CodeGenerationComponent.ComponentName.APP_MIGRATION, "password")
     ),
-
-    MONGODB_URI(requireMongoDB(), "MongoDB URI","mongoUri", FieldType.TEXT,
+    MONGODB_URI(requireMongoDB(), "MongoDB URI", "mongoUri", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.mongodb.uri")),
-
-    MONGODB_DATABASE(requireMongoDB(), "MongoDB useername","mongoDatabaseName", FieldType.TEXT,
+    MONGODB_DATABASE(requireMongoDB(), "MongoDB useername", "mongoDatabaseName", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.mongodb.database.name")),
-
-    APP_PORT(always(), "Application port","appPort", FieldType.NUMBER,
+    APP_PORT(always(), "Application port", "appPort", FieldType.NUMBER,
             of(CodeGenerationComponent.ComponentName.APP, "server.port")),
-
-    MEDIA_SERVER_LOC(always(), "Media server directory","mediaServer", FieldType.TEXT,
+    MEDIA_SERVER_LOC(always(), "Media server directory", "mediaServer", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.media.store.location")),
-
-    QUEUE_PREFIX(requireQueueServer(), "Prefix for queue name","queuePrefix", FieldType.TEXT,
+    QUEUE_PREFIX(requireQueueServer(), "Prefix for queue name", "queuePrefix", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.queue.context.prefix")),
-
-    QUEUE_SERVER(requireQueueServer(), "Queue servers","queueServer", FieldType.TEXT,
+    QUEUE_SERVER(requireQueueServer(), "Queue servers", "queueServer", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.queue.kafka.servers")),
-
-    GENERAL_QUEUE(requireQueueServer(), "System queue name","generalQueue", FieldType.TEXT,
+    GENERAL_QUEUE(requireQueueServer(), "System queue name", "generalQueue", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.queue.general")),
-
-    QUEUE_GROUP_ID(requireQueueServer(), "System queue message group","queueGroupId", FieldType.TEXT,
+    QUEUE_GROUP_ID(requireQueueServer(), "System queue message group", "queueGroupId", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.queue.kafka.groupId")),
-
-    QUEUE_SECURITY(requireQueueServer(), "Queue Security","queueSecurity", FieldType.BOOLEAN,
+    QUEUE_SECURITY(requireQueueServer(), "Queue Security", "queueSecurity", FieldType.BOOLEAN,
             of(CodeGenerationComponent.ComponentName.APP, "gode.queue.kafka.security.sasl")),
-
-    QUEUE_SECURITY_MECHANISM(requireQueueServer(), "Queue Security Mechanism","queueSecurityMechanism", FieldType.TEXT,
+    QUEUE_SECURITY_MECHANISM(requireQueueServer(), "Queue Security Mechanism", "queueSecurityMechanism", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.queue.kafka.security.mechanism")),
-
-    QUEUE_SECURITY_MECHANISM_JAAS(requireQueueServer(), "Queue Security Configuration","queueSecurityMechanismJaas", FieldType.TEXT,
-            of(CodeGenerationComponent.ComponentName.APP, "gode.queue.kafka.security.jaas")),
-
-    ;
+    QUEUE_SECURITY_MECHANISM_JAAS(requireQueueServer(), "Queue Security Configuration", "queueSecurityMechanismJaas", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.APP, "gode.queue.kafka.security.jaas")),;
 
     private static Function<LocalDeploymentRequirement, Function<CodeApp, String>> migrationSearch() {
-        return  requirement -> codeApp -> "hibernate:spring:org.ibs.cds.gode.entity.type?dialect=".concat(requirement.getValue());
+        return requirement -> codeApp -> "hibernate:spring:org.ibs.cds.gode.entity.type?dialect=".concat(requirement.getValue());
     }
 
     private final Predicate<CodeApp> entryCriteria;
@@ -96,8 +78,11 @@ public enum LocalDeploymentRequirement {
     private @Getter
     @Setter
     String value;
-    private @Getter List<Action> actions;
-    private @Getter String label;
+    private @Getter
+    List<Action> actions;
+    private @Getter
+    String label;
+
     LocalDeploymentRequirement(Predicate<CodeApp> entryCriteria, String label, String propertyName, FieldType type, Action... actions) {
         this.entryCriteria = entryCriteria;
         this.propertyName = propertyName;

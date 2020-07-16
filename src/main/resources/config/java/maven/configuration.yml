@@ -9,3 +9,5 @@ configuration:
     vmLocation: app_function.vm
   - type: RELATIONSHIP
     vmLocation: relationship.vm
+  - type: PIPELINE
+    vmLocation: pipeline.vm

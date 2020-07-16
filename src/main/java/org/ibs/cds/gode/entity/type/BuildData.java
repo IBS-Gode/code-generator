@@ -27,7 +27,6 @@ public class BuildData extends ManagedEntity {
     @OneToMany(cascade = CascadeType.ALL)
     private List<RelationshipStorePolicy> relationshipStorePolicy;
 
-
     public static BuildData fromModel(BuildModel model, App app){
         BuildData data = new BuildData();
         data.setLatest(true);

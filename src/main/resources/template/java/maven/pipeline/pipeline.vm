@@ -1,0 +1,6 @@
+#set($pipelinePath=${CodeAppUtil.pipelinePath($PIPELINE.app).toLowerCase()})
+configuration:
+  - name: Pipeline
+    path: $pipelinePath
+    template: pipeline_jenkins.vm
+    buildable: false

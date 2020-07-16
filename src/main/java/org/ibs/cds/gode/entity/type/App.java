@@ -24,6 +24,7 @@ public class App extends Specification {
     @JoinTable(name = "AppRelationships")
     private List<RelationshipEntitySpec> relationships;
 
+    private String codeUrl;
     public App() {
        this.entities = new ArrayList<>();
        this.functions = new ArrayList<>();

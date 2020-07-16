@@ -8,17 +8,13 @@ import org.ibs.cds.gode.codegenerator.model.deploy.Action;
 import org.ibs.cds.gode.codegenerator.model.deploy.LocalDeploymentRequirement;
 import org.ibs.cds.gode.status.BinaryStatus;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.function.Predicate;

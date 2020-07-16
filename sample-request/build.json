@@ -49,6 +49,7 @@
         "storeName": "MYSQL"
       }
     ],
-    "progLanguage": "JAVA"
+    "progLanguage": "JAVA",
+    "pipelineGeneration": true
   }
 }

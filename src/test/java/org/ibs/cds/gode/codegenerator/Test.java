@@ -1,5 +1,6 @@
 package org.ibs.cds.gode.codegenerator;
 
+import java.io.IOException;
 import org.ibs.cds.gode.codegenerator.bind.ArtifactPackaging;
 import org.ibs.cds.gode.codegenerator.entity.AppCodeGenerator;
 import org.ibs.cds.gode.codegenerator.model.build.BuildModel;
@@ -10,15 +11,42 @@ import org.ibs.cds.gode.entity.relationship.RelationshipType;
 import org.ibs.cds.gode.entity.type.*;
 
 import java.util.List;
+import org.ibs.cds.gode.entity.generic.AB;
 
 public class Test {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+//        CheckInManager checkInManager = new CheckInManager("http://localhost:3000","b23c7dd0a8e07d3e32f2adbf706ecef4472e3c2b", "ibs", "http://localhost:3000/api/v1");
+//        App app = app().getA();
+//        String path = "/Users/a-9023/Documents/work/code/code-generator/releases/5/app1-container";
+////        System.out.println(checkInManager.createRemoteRepo("test4", "s"));
+//        checkInManager.localRepo(app.getName().toLowerCase(), app.getDescription(), path);
+//       // testGenerate(app());
+//        checkInManager.checkIn(app.getName().toLowerCase(), path, new CheckInModel("manugraj", "grajmanu@gmail.com", "Test" ,"upgrade4"));
+    }
 
+    private static void testGenerate(AB<App, RelationshipEntitySpec> app ) {
+
+        RelationshipStorePolicy policy = new RelationshipStorePolicy();
+        policy.setStoreName(StoreName.MYSQL);
+        policy.setRelationship(app.getB());
+        policy.setAdditionalFields(List.of());
+
+        BuildModel model = new BuildModel();
+        model.setProgLanguage(ProgLanguage.JAVA);
+        model.setArtifactPackaging(ArtifactPackaging.MAVEN);
+        model.setApp(app.getA());
+        model.setSecure(false);
+        model.setRelationshipStorePolicy(List.of(policy));
+
+        AppCodeGenerator appCodeGenerator = new AppCodeGenerator(app.getA(), model);
+        appCodeGenerator.generate();
+    }
+
+    private static AB<App, RelationshipEntitySpec> app() {
         EntityField field = new EntityField();
         field.setName("name");
         field.setType(FieldType.TEXT);
-
 
         EntityField of = new EntityField();
         of.setName("test1");
@@ -69,12 +97,11 @@ public class Test {
         EntityState state3 = new EntityState();
         state3.setVolatileEntity(true);
 
-
         StatefulEntitySpec statefulEntitySpec = new StatefulEntitySpec();
         statefulEntitySpec.setName("Entity1");
         statefulEntitySpec.setDescription("Entity 1 descr");
         statefulEntitySpec.setVersion(2L);
-        statefulEntitySpec.setFields(List.of(field,obj, obj2));
+        statefulEntitySpec.setFields(List.of(field, obj, obj2));
         statefulEntitySpec.setIdField(idField);
         statefulEntitySpec.setState(state);
 
@@ -110,18 +137,18 @@ public class Test {
 
         AppFunction function = new AppFunction();
         function.setMethodName("method1");
-        function.setInput(List.of(new AppFuncArgument(statefulEntitySpec,"arg1")));
+        function.setInput(List.of(new AppFuncArgument(statefulEntitySpec, "arg1")));
         function.setOutput(List.of(
-                new AppFuncArgument(statefulEntitySpec,"arg1"),
-                new AppFuncArgument(statefulEntitySpec2,"arg2")
-                ));
+                new AppFuncArgument(statefulEntitySpec, "arg1"),
+                new AppFuncArgument(statefulEntitySpec2, "arg2")
+        ));
 
         AppFunction function2 = new AppFunction();
         function2.setMethodName("method2");
-        function2.setInput(List.of(new AppFuncArgument(statefulEntitySpec,"arg1")));
+        function2.setInput(List.of(new AppFuncArgument(statefulEntitySpec, "arg1")));
         function2.setOutput(List.of(
-                new AppFuncArgument(statefulEntitySpec,"arg1"),
-                new AppFuncArgument(statefulEntitySpec2,"arg2")
+                new AppFuncArgument(statefulEntitySpec, "arg1"),
+                new AppFuncArgument(statefulEntitySpec2, "arg2")
         ));
 
         App app = new App();
@@ -131,21 +158,6 @@ public class Test {
         app.setEntities(List.of(statefulEntitySpec, statefulEntitySpec2, statefulEntitySpec3));
         app.setFunctions(List.of(function, function2));
         app.setRelationships(List.of(relationshipEntitySpec));
-
-        RelationshipStorePolicy policy = new RelationshipStorePolicy();
-        policy.setStoreName(StoreName.MYSQL);
-        policy.setRelationship(relationshipEntitySpec);
-        policy.setAdditionalFields(List.of());
-
-        BuildModel model = new BuildModel();
-        model.setProgLanguage(ProgLanguage.JAVA);
-        model.setArtifactPackaging(ArtifactPackaging.MAVEN);
-        model.setApp(app);
-        model.setSecure(false);
-        model.setRelationshipStorePolicy(List.of(policy));
-
-
-        AppCodeGenerator appCodeGenerator = new AppCodeGenerator( app, model );
-        appCodeGenerator.generate();
+        return AB.of(app, relationshipEntitySpec);
     }
 }

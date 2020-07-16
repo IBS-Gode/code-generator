@@ -28,29 +28,26 @@ public class AppCodeGenerator {
     public boolean generate() {
         CodeApp app = new CodeApp(rawApp, buildModel);
         CodeAdminApp codeAdminApp = new CodeAdminApp(app, buildModel);
+        CodeAppPipeline pipeline = new CodeAppPipeline(app, buildModel);
 
         EngineConfiguration configuration = new EngineConfiguration(buildModel);
         String repo = app.getVersion().toString();
+        
         VelocityGeneratorEngine<CodeEntity> codeEntityVelocityGeneratorEngine = new VelocityGeneratorEngine(configuration, repo);
         VelocityGeneratorEngine<CodeAppFunctionNode> codeAppFunctionVelocityGeneratorEngine = new VelocityGeneratorEngine(configuration, repo);
         VelocityGeneratorEngine<CodeEntityRelationship> relationshipVelocityGeneratorEngine = new VelocityGeneratorEngine(configuration, repo);
-
         VelocityGeneratorEngine<CodeApp> codeAppVelocityGeneratorEngine = new VelocityGeneratorEngine(configuration, repo);
         VelocityGeneratorEngine<CodeAdminApp> codeAdminAppVelocityGeneratorEngine = new VelocityGeneratorEngine(configuration, repo);
+        VelocityGeneratorEngine<CodeAppPipeline> codeAppPipelineGeneratorEngine = new VelocityGeneratorEngine(configuration, repo);
 
-        Stream.of(PathPackage.values()).forEach(pathPackage -> {
-            codeEntityVelocityGeneratorEngine.addToContext(pathPackage.name(), pathPackage);
-            codeAppVelocityGeneratorEngine.addToContext(pathPackage.name(), pathPackage);
-            codeAdminAppVelocityGeneratorEngine.addToContext(pathPackage.name(), pathPackage);
-            codeAppFunctionVelocityGeneratorEngine.addToContext(pathPackage.name(), pathPackage);
-            relationshipVelocityGeneratorEngine.addToContext(pathPackage.name(), pathPackage);
-        });
-
-        commonProperties(codeEntityVelocityGeneratorEngine,
+        commonProperties(
+                codeEntityVelocityGeneratorEngine,
                 codeAppFunctionVelocityGeneratorEngine,
                 codeAppVelocityGeneratorEngine,
                 codeAdminAppVelocityGeneratorEngine,
-                relationshipVelocityGeneratorEngine);
+                relationshipVelocityGeneratorEngine,
+                codeAppPipelineGeneratorEngine
+        );
 
         codeEntityVelocityGeneratorEngine.addToContext("app", app);
         codeEntityVelocityGeneratorEngine.addToContext("StoreUtils", StoreUtils.class);
@@ -72,34 +69,43 @@ public class AppCodeGenerator {
 
         BinaryStatus appFunctionGenerationStatus = codeAppFunctionVelocityGeneratorEngine.run(app.getAppFunction());
 
-
         BinaryStatus codeAppStatus = codeAppVelocityGeneratorEngine.run(app);
 
         BinaryStatus codeAdminStatus = codeAdminAppVelocityGeneratorEngine.run(codeAdminApp);
-
-        log.info("Code Generation status- Entity: {} | App Function: {} | Relationships: {} | Application: {} | Admin App: {}",
-                entityGenerationStatus, appFunctionGenerationStatus, relationshipGenerationStatus, codeAppStatus, codeAdminStatus);
 
         BinaryStatus codeAppBuildStatus = BinaryStatus.valueOf(codeAppVelocityGeneratorEngine.getBuildable().stream()
                 .map(buildable -> ArtefactBinding.resolve(buildModel.getArtifactPackaging()).run(buildable))
                 .allMatch(k -> k));
 
+        boolean statusAccumulated = entityGenerationStatus.isSuccess()
+                && codeAppStatus.isSuccess()
+                && relationshipGenerationStatus.isSuccess()
+                && codeAdminStatus.isSuccess()
+                && codeAppBuildStatus.isSuccess();
+
+        if (buildModel.isPipelineGeneration() && !buildModel.isInherited()) {
+            BinaryStatus codePipelineStatus = codeAppPipelineGeneratorEngine.run(pipeline);
+            log.info("Code Generation status- Entity: {} | App Function: {} | Relationships: {} | Application: {} | Admin App: {} | Draft-Pipeline : {}",
+                    entityGenerationStatus, appFunctionGenerationStatus, relationshipGenerationStatus, codeAppStatus, codeAdminStatus, codePipelineStatus);
+            log.info("Code Build status: {} ", codeAppBuildStatus);
+            return statusAccumulated && codePipelineStatus.isSuccess();
+        }
+        
+        log.info("Code Generation status- Entity: {} | App Function: {} | Relationships: {} | Application: {} | Admin App: {}",
+                entityGenerationStatus, appFunctionGenerationStatus, relationshipGenerationStatus, codeAppStatus, codeAdminStatus);
         log.info("Code Build status: {} ", codeAppBuildStatus);
-        return entityGenerationStatus.isSuccess() &&
-                codeAppStatus.isSuccess() &&
-                relationshipGenerationStatus.isSuccess() &&
-                codeAdminStatus.isSuccess() &&
-                codeAppBuildStatus.isSuccess();
+        return statusAccumulated;
     }
 
-    public void commonProperties(VelocityGeneratorEngine... generatorEngines) {
-        Arrays.stream(generatorEngines).forEach(generatorEngine->{
+    private void commonProperties(VelocityGeneratorEngine... generatorEngines) {
+        Arrays.stream(generatorEngines).forEach(generatorEngine -> {
             generatorEngine.addToContext("PathPackage", PathPackage.class);
             generatorEngine.addToContext("CodeAppUtil", CodeAppUtil.class);
             generatorEngine.addToContext("StoreType", StoreType.class);
             generatorEngine.addToContext("DeploymentRequirement", DeploymentRequirement.class);
+            Stream.of(PathPackage.values()).forEach(pathPackage -> generatorEngine.addToContext(pathPackage.name(), pathPackage));
         });
 
-
     }
+    
 }

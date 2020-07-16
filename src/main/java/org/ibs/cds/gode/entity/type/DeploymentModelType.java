@@ -1,4 +1,4 @@
-package org.ibs.cds.gode.codegenerator.model.deploy;
+package org.ibs.cds.gode.entity.type;
 
 public enum DeploymentModelType {
     LOCAL,

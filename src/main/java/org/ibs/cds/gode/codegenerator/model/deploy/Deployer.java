@@ -22,7 +22,6 @@ public class Deployer {
     private static  final String LOCAL_ADMIN_APP = "http://localhost:%s/%s";
     public static DeploymentComplete doDeployment(DeploymentModel model, CodeApp app) {
         try {
-
             Map<String, String> localDeployment = model.getLocalDeploymentRequired();
             if (MapUtils.isNotEmpty(model.getLocalDeploymentRequired())) {
                 if (updateRequirement(app, localDeployment)) {

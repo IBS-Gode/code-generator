@@ -6,7 +6,6 @@ import org.ibs.cds.gode.entity.store.StoreType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
-import java.time.OffsetDateTime;
 import java.util.Date;
 
 @MappedSuperclass

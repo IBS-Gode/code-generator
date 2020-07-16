@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import org.ibs.cds.gode.codegenerator.model.build.BuildModel;
 
 @Service
 public class BuildDataManager extends PureEntityManager< BuildData, Long> {
@@ -27,6 +28,12 @@ public class BuildDataManager extends PureEntityManager< BuildData, Long> {
         return repo.findLatestBuild(appId);
     }
 
+    public BuildModel findLatestBuildModel(Long appId){
+        BuildDataRepository repo = repository.get();
+        BuildData buildData = repo.findLatestBuild(appId);
+        return buildData == null ? null : buildData.toBuildModel();
+    }
+    
     public PagedData<BuildData> findBuild(String appName, Long appVersion, PageContext context){
         BuildDataRepository repo = repository.get();
         return repo.findBuild(appName, appVersion, context);

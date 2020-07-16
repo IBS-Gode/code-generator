@@ -1,7 +1,7 @@
 package org.ibs.cds.gode.codegenerator.model.deploy;
 
+import org.ibs.cds.gode.entity.type.DeploymentModelType;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.ibs.cds.gode.entity.type.Specification;
 
 import java.util.HashMap;

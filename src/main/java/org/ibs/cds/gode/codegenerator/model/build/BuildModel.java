@@ -1,5 +1,6 @@
 package org.ibs.cds.gode.codegenerator.model.build;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.ibs.cds.gode.codegenerator.bind.ArtifactPackaging;
 import org.ibs.cds.gode.codegenerator.spec.ProgLanguage;
@@ -19,8 +20,16 @@ public class BuildModel {
     private boolean secure;
     private boolean systemQueue;
     private List<RelationshipStorePolicy> relationshipStorePolicy;
-
+    private boolean pipelineGeneration;
+    
+    private Inherit previous;
+    
     public BuildModel() {
         this.entityStorePref = new ArrayList<>();
+    }
+    
+    @JsonIgnore
+    public boolean isInherited(){
+        return previous != null && previous.isInherit();
     }
 }

@@ -7,6 +7,7 @@
     <groupId>org.ibs.cds.gode</groupId>
     <artifactId>code-generator</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -93,6 +94,16 @@
         <dependency>
             <groupId>org.ibs.cds.gode</groupId>
             <artifactId>gode-store</artifactId>
+            <version>${gode.version}</version>
+        </dependency>
+         <dependency>
+            <groupId>org.ibs.cds.gode</groupId>
+            <artifactId>gode-deployer</artifactId>
+            <version>${gode.version}</version>
+        </dependency>
+         <dependency>
+            <groupId>org.ibs.cds.gode</groupId>
+            <artifactId>gode-http</artifactId>
             <version>${gode.version}</version>
         </dependency>
         <dependency>
