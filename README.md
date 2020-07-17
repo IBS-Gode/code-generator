@@ -6,6 +6,7 @@ A code generator with an edge
 
 ## Requirement
 - Java 11
+- Maven 3.6.2
 - Node 11 as default (node -v should start with v11)
 - MySQL database (give credentials in gode.properties)
 - Gitea (https://gitea.io/en-us/)
