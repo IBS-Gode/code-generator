@@ -25,11 +25,17 @@ A code generator with an edge
 ## Configure Jenkins
 - Install plugins
     - Maven Integration
-    - Gitea 
+    - Gitea
+    - Ansible
+    - Terraform 
 - Go to 'New Item' > Setup 'Gitea Organisation'
     - Name: Gode Artifacts
     - Give Gitea credentials
     - Project Recognizers: build/Pipeline
+- Do global tool configuration 
+    - maven as 'maven'
+    - jdk as 'jdk11'
+    - terraform as 'terraform'
 
 ## How to build
 - Clone the project
@@ -40,3 +46,9 @@ A code generator with an edge
     - `yarn theia build`
 - Start the main spring boot app in `GodeGenerator` 
 - Sample requests are available in sample-requests folder
+
+
+## How to edit pipeline
+- Provide 'pipelineGeneration' as true in BuildModel during code generation
+- After successful build, call 'Edit pipeline' endpoint in swagger. It will give you a edit url.
+- Edit the pipeline and checkin the change using 'Checkin endpoint'
