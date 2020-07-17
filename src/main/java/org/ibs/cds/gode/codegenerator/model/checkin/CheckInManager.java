@@ -1,8 +1,5 @@
 package org.ibs.cds.gode.codegenerator.model.checkin;
 
-import java.io.File;
-import java.util.Map;
-import java.util.Optional;
 import org.apache.commons.lang3.tuple.Pair;
 import org.ibs.cds.gode.codegenerator.entity.CodeApp;
 import org.ibs.cds.gode.codegenerator.entity.CodeAppUtil;
@@ -11,9 +8,16 @@ import org.ibs.cds.gode.deployer.git.RemoteGit;
 import org.ibs.cds.gode.deployer.git.RemoteGitUrl;
 import org.ibs.cds.gode.entity.type.App;
 import org.ibs.cds.gode.exception.KnownException;
+import org.ibs.cds.gode.status.BinaryStatus;
 import org.ibs.cds.gode.util.Assert;
+import org.ibs.cds.gode.util.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  *
@@ -76,17 +80,43 @@ public class CheckInManager {
         return cloneUrl;
     }
 
-    public boolean checkIn(CodeApp app, CheckInModel checkInModel) {
-        return checkIn(app.getName().toLowerCase(), String.valueOf(app.getVersion()), CodeAppUtil.appPath(app), checkInModel);
+    public CheckInComplete checkIn(CodeApp app, CheckInModel checkInModel) {
+        return checkIn(app.getName().toLowerCase(), CodeAppUtil.appPath(app), checkInModel);
     }
 
-    private boolean checkIn(String repoName, String version, String path, CheckInModel checkInModel) {
+    private CheckInComplete checkIn(String repoName, String path, CheckInModel checkInModel) {
         String cloneUrl = this.remoteRepoExist(repoName).map(repoUrl -> repoUrl).orElseThrow();
         Assert.notNull("Git Url cannot be empty", cloneUrl);
-        LocalGit git = LocalGit.at(repoName, new File(path), new RemoteGitUrl(cloneUrl, remoteRepoAuth));
-        git.checkout(version);
+        LocalGit git = getLocalGit(repoName, path, checkInModel, cloneUrl);
         git.add(".");
-        git.commit(checkInModel.getMessage(), checkInModel.getUsername(), checkInModel.getEmail());
-        return git.push();
+        return commitAndPush(checkInModel, cloneUrl, git);
+    }
+
+    @NotNull
+    private CheckInComplete commitAndPush(CheckInModel checkInModel, String cloneUrl, LocalGit git) {
+        String commit = git.commit(checkInModel.getMessage(), checkInModel.getUsername(), checkInModel.getEmail());
+        if (git.push()) {
+            return new CheckInComplete(BinaryStatus.SUCCESS, cloneUrl, commit);
+        }
+        return CheckInComplete.failed();
+    }
+
+    private CheckInComplete checkIn(String repoName, String path, String specificFile, CheckInModel checkInModel) {
+        String cloneUrl = this.remoteRepoExist(repoName).map(repoUrl -> repoUrl).orElseThrow();
+        Assert.notNull("Git Url cannot be empty", cloneUrl);
+        LocalGit git = getLocalGit(repoName, path, checkInModel, cloneUrl);
+        git.add(specificFile);
+        return commitAndPush(checkInModel, cloneUrl, git);
+    }
+
+    @NotNull
+    private LocalGit getLocalGit(String repoName, String path, CheckInModel checkInModel, String cloneUrl) {
+        LocalGit git = LocalGit.at(repoName, new File(path), new RemoteGitUrl(cloneUrl, remoteRepoAuth));
+        git.checkout(getBranchName(checkInModel));
+        return git;
+    }
+
+    public String getBranchName(CheckInModel model){
+        return model.getType().getBranchPrefix().concat("/").concat(StringUtils.replace(model.getPurpose(), " ","-").toLowerCase());
     }
 }

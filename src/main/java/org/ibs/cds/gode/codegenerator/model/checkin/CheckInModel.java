@@ -17,5 +17,6 @@ public class CheckInModel {
     private String username;
     private String email;
     private String message;
+    private CheckInType type;
     private String purpose;
 }

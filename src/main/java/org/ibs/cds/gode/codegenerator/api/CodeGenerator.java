@@ -8,6 +8,7 @@ import org.ibs.cds.gode.codegenerator.entity.StorePolicy;
 import org.ibs.cds.gode.codegenerator.model.build.BuildComplete;
 import org.ibs.cds.gode.codegenerator.model.build.BuildModel;
 import org.ibs.cds.gode.codegenerator.model.build.Builder;
+import org.ibs.cds.gode.codegenerator.model.checkin.CheckInComplete;
 import org.ibs.cds.gode.codegenerator.model.deploy.*;
 import org.ibs.cds.gode.codegenerator.spec.StoreName;
 import org.ibs.cds.gode.entity.generic.DataMap;
@@ -78,7 +79,7 @@ public class CodeGenerator {
 
     @PostMapping(path = "/checkin")
     @ApiOperation(value = "Operation to checkin App")
-    public Response<Boolean> checkin(@RequestBody Request<CheckInModel> checkInModelRequest) {
+    public Response<CheckInComplete> checkin(@RequestBody Request<CheckInModel> checkInModelRequest) {
         CheckInModel model = checkInModelRequest.getData();
         Specification app = model.getApp();
         CodeApp codedApp = getCodeApp(app);

@@ -26,11 +26,12 @@
         "prepare": "yarn run clean && yarn build && yarn run download:plugins",
         "clean": "theia clean",
         "build": "theia build --mode development",
-        "start": "theia start --plugins=local-dir:plugins",
+        "start": "theia start --plugins=plugins",
         "download:plugins": "theia download:plugins"
     },
     "theiaPluginsDir": "plugins",
     "theiaPlugins": {
+        "vscode-lombok" : "",
         "vscode-builtin-bat": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/bat-1.39.1-prel.vsix",
         "vscode-builtin-clojure": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/clojure-1.39.1-prel.vsix",
         "vscode-builtin-coffeescript": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/coffeescript-1.39.1-prel.vsix",

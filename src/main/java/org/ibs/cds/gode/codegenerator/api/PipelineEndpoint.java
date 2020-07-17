@@ -6,6 +6,7 @@ import org.ibs.cds.gode.codegenerator.api.usage.CodeGeneratorApi;
 import org.ibs.cds.gode.codegenerator.entity.CodeApp;
 import org.ibs.cds.gode.codegenerator.entity.CodeAppUtil;
 import org.ibs.cds.gode.codegenerator.ide.CloudIDE;
+import org.ibs.cds.gode.codegenerator.model.checkin.CheckInComplete;
 import org.ibs.cds.gode.codegenerator.model.checkin.CheckInManager;
 import org.ibs.cds.gode.codegenerator.model.checkin.CheckInModel;
 import org.ibs.cds.gode.entity.manager.AppManager;
@@ -55,7 +56,7 @@ public class PipelineEndpoint {
 
     @PostMapping(path = "/checkin")
     @ApiOperation(value = "Operation to checkin pipeline")
-    public Response<Boolean> savePipeline(@RequestBody Request<CheckInModel> checkInPipelineRequest) {
+    public Response<CheckInComplete> savePipeline(@RequestBody Request<CheckInModel> checkInPipelineRequest) {
         return Processor.successResponse(this.checkInManager.checkIn(getCodeApp(checkInPipelineRequest.getData().getApp()), checkInPipelineRequest.getData()), checkInPipelineRequest, "/checkin");
     }
     
