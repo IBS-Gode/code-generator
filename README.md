@@ -2,7 +2,7 @@
 A code generator with an edge
 
 ## Details: 
-- https://sway.office.com/ykxqQy71pl4c8QzC?ref=Link
+- [Presentation](https://sway.office.com/ykxqQy71pl4c8QzC?ref=Link)
 
 ## Requirement
 - Java 11
@@ -21,7 +21,7 @@ A code generator with an edge
     - Specify organisation name in gode.properties
     - Create a webhook for organisation 'ibs'. Refer [the blog post](https://mike42.me/blog/2019-05-how-to-integrate-gitea-and-jenkins)
         - Customise events
-- Go to http://<Gitea IP>:<Gitea Port>/api/swagger for verification
+- Go to `http://<Gitea IP>:<Gitea Port>/api/swagger` for verification
         
 ## Configure Jenkins
 - Install plugins
