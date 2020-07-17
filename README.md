@@ -13,12 +13,13 @@ A code generator with an edge
     - Give credentials in gode.properties
 - Jenkins
     - Give credentials in gode.properties
+- Setup [gode-core](https://github.com/ibs-gode/gode-core) and run `mvn clean install`
 
 ## Configure Gitea
 - Create user for jenkins
 - Create organisation called 'ibs'
     - Specify organisation name in gode.properties
-    - Create a webhook for organisation 'ibs'. Refer https://mike42.me/blog/2019-05-how-to-integrate-gitea-and-jenkins
+    - Create a webhook for organisation 'ibs'. Refer [the blog post](https://mike42.me/blog/2019-05-how-to-integrate-gitea-and-jenkins)
         - Customise events
 - Go to http://<Gitea IP>:<Gitea Port>/api/swagger for verification
         
@@ -52,3 +53,4 @@ A code generator with an edge
 - Provide 'pipelineGeneration' as true in BuildModel during code generation
 - After successful build, call 'Edit pipeline' endpoint in swagger. It will give you a edit url.
 - Edit the pipeline and checkin the change using 'Checkin endpoint'
+- Refer [Jenkins documentation](https://www.jenkins.io/doc/book/pipeline/)
