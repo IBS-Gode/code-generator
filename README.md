@@ -15,7 +15,7 @@ A code generator with an edge
 - Jenkins
     - Give credentials in gode.properties
 - Setup [gode-core](https://github.com/ibs-gode/gode-core) and run `mvn clean install`
-- Only linux systems including mac are supported now.
+- Only unix systems/subsystems including mac are supported now.
 
 ## Configure Gitea
 - Create user for jenkins
