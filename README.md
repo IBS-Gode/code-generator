@@ -15,6 +15,7 @@ A code generator with an edge
 - Jenkins
     - Give credentials in gode.properties
 - Setup [gode-core](https://github.com/ibs-gode/gode-core) and run `mvn clean install`
+- Only linux systems including maven are supported now.
 
 ## Configure Gitea
 - Create user for jenkins
@@ -46,6 +47,7 @@ A code generator with an edge
 - Run the yarn build for IDE support
     - `yarn`
     - `yarn theia build`
+- Give executable permissions to `ide.sh` and `terminal.sh`    
 - Start the main spring boot app in `GodeGenerator` 
 - Sample requests are available in sample-requests folder
 
