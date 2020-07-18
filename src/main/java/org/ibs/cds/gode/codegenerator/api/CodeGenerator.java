@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.ibs.cds.gode.codegenerator.api.usage.CodeGeneratorApi;
 import org.ibs.cds.gode.codegenerator.entity.CodeApp;
 import org.ibs.cds.gode.codegenerator.entity.StorePolicy;
+import org.ibs.cds.gode.codegenerator.ide.Terminal;
 import org.ibs.cds.gode.codegenerator.model.build.BuildComplete;
 import org.ibs.cds.gode.codegenerator.model.build.BuildModel;
 import org.ibs.cds.gode.codegenerator.model.build.Builder;
@@ -42,19 +43,18 @@ import org.ibs.cds.gode.util.Assert;
 public class CodeGenerator {
 
     private AppManager appManager;
-
     private BuildDataManager buildDataManager;
-
     private CheckInManager checkInManager;
-
     private Builder builder;
+    private Terminal terminal;
 
     @Autowired
-    public CodeGenerator(AppManager appManager, BuildDataManager buildDataManager, Builder builder, CheckInManager checkInManager) {
+    public CodeGenerator(AppManager appManager, BuildDataManager buildDataManager, Builder builder, CheckInManager checkInManager, Terminal terminal) {
         this.appManager = appManager;
         this.buildDataManager = buildDataManager;
         this.builder = builder;
         this.checkInManager = checkInManager;
+        this.terminal = terminal;
     }
 
     @PostMapping(path = "/design")
@@ -75,15 +75,6 @@ public class CodeGenerator {
         App foundApp = app.getArtifactId() == null ? appManager.find(app.getName(), app.getVersion()) : appManager.find(app.getArtifactId());
         Assert.notNull("No app information is available", foundApp);
         return Processor.successResponse(builder.build(data, foundApp), buildModelRequest, "/build");
-    }
-
-    @PostMapping(path = "/checkin")
-    @ApiOperation(value = "Operation to checkin App")
-    public Response<CheckInComplete> checkin(@RequestBody Request<CheckInModel> checkInModelRequest) {
-        CheckInModel model = checkInModelRequest.getData();
-        Specification app = model.getApp();
-        CodeApp codedApp = getCodeApp(app);
-        return Processor.successResponse(checkInManager.checkIn(codedApp, model), checkInModelRequest, "/checkin");
     }
 
     @PostMapping(path = "/deploy")

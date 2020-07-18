@@ -30,6 +30,8 @@ releases/
 apps/
 ide.started
 ide.stopped
+terminal.started
+terminal.stopped
 lib/
 node_modules/
 package-lock.json
