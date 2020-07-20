@@ -1,0 +1,60 @@
+#set($entity = $Channel.get($key))
+package $DEFAULT__ENTITY_CONTROLLER_DIRECTORY.value;
+
+import ${DEFAULT__ENTITY_MANAGER_DIRECTORY.value}.${entity.name}Manager;
+#if(${entity.storePolicy.isCached()})
+import ${DEFAULT__ENTITY_REPO_DIRECTORY.value}.${entity.name}CacheRepository;
+#end
+#if(${entity.storePolicy.hasDatabase()})
+import ${DEFAULT__ENTITY_REPO_DIRECTORY.value}.${entity.name}StoreRepository;
+#end
+import ${DEFAULT__ENTITY_VIEW_DIRECTORY.value}.${entity.name}View;
+
+import java.util.Optional;
+
+public class ${entity.name}StateControllerTest extends EntityStateControllerTest<${entity.name}StateController, ${entity.name}Manager, ${entity.name}View,${entity.getIdField().getObject().getFQN()}> {
+
+    @Override
+    public Class<${entity.name}Manager> managerClass() {
+        return ${entity.name}Manager.class;
+    }
+
+    @Override
+    public Class<${entity.name}StateController> controllerClass() {
+        return ${entity.name}StateController.class;
+    }
+
+    @Override
+    public Class<${entity.getIdField().getObject().getFQN()}> idClass() {
+        return ${entity.getIdField().getObject().getFQN()}.class;
+    }
+
+    @Override
+    public ${entity.name}View view() {
+        return new ${entity.name}View();
+    }
+
+    @Override
+    public Optional<Class> storeRepo() {
+        #if(${entity.storePolicy.hasDatabase()})
+        return Optional.of(${entity.name}StoreRepository.class);
+        #else
+        return Optional.empty();
+        #end
+    }
+
+    @Override
+    public Optional<Class> cacheRepo() {
+        #if(${entity.storePolicy.isCached()})
+        return Optional.of(${entity.name}CacheRepository.class);
+        #else
+        return Optional.empty();
+        #end
+    }
+
+    #if(${entity.storePolicy.isAsync()})
+    public boolean isAsync(){
+            return true;
+        }
+    #end
+}

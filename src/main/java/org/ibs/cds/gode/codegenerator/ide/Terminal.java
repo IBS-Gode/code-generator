@@ -22,10 +22,12 @@ public class Terminal {
         log.info("Starting terminal @{} for{}", port, path);
         CompletableFuture.runAsync(() -> {
             Try
-                    .code((AB<String,String> pathPort) -> {
-                        File file = new File("terminal.sh");
-                        System.out.println(SystemRunner.run(file.getAbsolutePath(),pathPort.getA(), pathPort.getB()));
-                    })
+                    .code(
+                            (AB<String, String> pathPort) -> {
+                                File file = new File("terminal.sh");
+                                System.out.println(SystemRunner.run(file.getAbsolutePath(), pathPort.getA(), pathPort.getB()));
+                            }
+                    )
                     .catchWith(KnownException.SYSTEM_FAILURE)
                     .run(AB.of(port, path));
         });

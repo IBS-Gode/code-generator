@@ -16,7 +16,13 @@ pipeline {
 
         stage ('Build') {
             steps {
-                sh 'mvn clean install' 
+                sh 'mvn clean install -P skip-test'
+            }
+        }
+
+        stage ('Test') {
+            steps {
+                sh 'mvn clean install -P testOnly'
             }
         }
     }

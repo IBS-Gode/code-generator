@@ -29,6 +29,14 @@ public class CodeAppUtil {
         return PathPackage.path("src", "main", "java");
     }
 
+    public static String testPath() {
+        return PathPackage.path("src", "test", "java");
+    }
+
+    public static String pipelinePath() {
+        return PathPackage.path("build");
+    }
+
     public static String javaResourcePath() {
         return PathPackage.path("src", "main", "resources");
     }
@@ -39,6 +47,10 @@ public class CodeAppUtil {
 
     public static String pipelinePath(CodeApp app) {
         return PathPackage.path(appPath(app), "build").toLowerCase();
+    }
+
+    public static String testcasePath(CodeAppTestCase testCase) {
+        return PathPackage.path(appPath(testCase.getApp()), testCase.getName()).toLowerCase();
     }
 
     public static String appPath(App app) {

@@ -21,7 +21,7 @@ public class Test {
 //        String path = "/Users/a-9023/Documents/work/code/code-generator/releases/5/app1-container";
 ////        System.out.println(checkInManager.createRemoteRepo("test4", "s"));
 //        checkInManager.localRepo(app.getName().toLowerCase(), app.getDescription(), path);
-//       // testGenerate(app());
+        testGenerate(app());
 //        checkInManager.checkIn(app.getName().toLowerCase(), path, new CheckInModel("manugraj", "grajmanu@gmail.com", "Test" ,"upgrade4"));
     }
 
@@ -37,6 +37,7 @@ public class Test {
         model.setArtifactPackaging(ArtifactPackaging.MAVEN);
         model.setApp(app.getA());
         model.setSecure(false);
+        model.setPipelineGeneration(true);
         model.setRelationshipStorePolicy(List.of(policy));
 
         AppCodeGenerator appCodeGenerator = new AppCodeGenerator(app.getA(), model);

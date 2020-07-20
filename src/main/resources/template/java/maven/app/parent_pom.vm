@@ -13,17 +13,48 @@
     <artifactId>$projectName</artifactId>
     <packaging>pom</packaging>
     <version>$projectVersion</version>
-    <modules>
-        <module>$appName</module>
-        <module>$monitorName</module>
-        <module>$appFunctionName</module>
-        #foreach($entity in $APP.entities)
-            <module>${entity.getName().toLowerCase()}</module>
-        #end
-        #foreach($relationship in $APP.relationships)
-            <module>${relationship.getName().toLowerCase()}</module>
-        #end
-    </modules>
+
+    <profiles>
+            <profile>
+                <id>testOnly</id>
+                <modules>
+                    <module>${appName}-test</module>
+                </modules>
+            </profile>
+            <profile>
+                <id>skip-test</id>
+                  <modules>
+                        <module>$appName</module>
+                        <module>$monitorName</module>
+                        <module>$appFunctionName</module>
+                        #foreach($entity in $APP.entities)
+                            <module>${entity.getName().toLowerCase()}</module>
+                        #end
+                        #foreach($relationship in $APP.relationships)
+                            <module>${relationship.getName().toLowerCase()}</module>
+                        #end
+                    </modules>
+            </profile>
+            <profile>
+                <id>default</id>
+                <activation>
+                    <activeByDefault>true</activeByDefault>
+                </activation>
+                  <modules>
+                        <module>$appName</module>
+                        <module>$monitorName</module>
+                        <module>$appFunctionName</module>
+                        #foreach($entity in $APP.entities)
+                            <module>${entity.getName().toLowerCase()}</module>
+                        #end
+                        #foreach($relationship in $APP.relationships)
+                            <module>${relationship.getName().toLowerCase()}</module>
+                        #end
+                        <module>${appName}-test</module>
+                    </modules>
+            </profile>
+        </profiles>
+
     <parent>
         <groupId>org.ibs.cds.gode</groupId>
         <artifactId>gode-core</artifactId>

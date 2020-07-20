@@ -11,3 +11,5 @@ configuration:
     vmLocation: relationship.vm
   - type: PIPELINE
     vmLocation: pipeline.vm
+  - type: TEST_CASE
+    vmLocation: test_case.vm

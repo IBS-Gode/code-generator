@@ -1,0 +1,28 @@
+#set($entity = $Channel.get($key))
+package $DEFAULT__ENTITY_REPO_DIRECTORY.value;
+
+import ${DEFAULT__ENTITY_TYPE_DIRECTORY.value}.${entity.name};
+
+public class ${entity.name}StoreRepositoryTest extends EntityStoreRepositoryTest<${entity.name}StoreRepository, ${entity.name}, ${entity.getIdField().getObject().getFQN()}> {
+
+    @Override
+    public Class repoClass() {
+        return ${entity.name}StoreRepo.class;
+    }
+
+    @Override
+    public Class<${entity.getIdField().getObject().getFQN()}> idClass() {
+        return ${entity.getIdField().getObject().getFQN()}.class;
+    }
+
+
+    @Override
+    public ${entity.name} entity() {
+        return new ${entity.name}();
+    }
+
+    @Override
+    public Class<${entity.name}StoreRepository> repositoryClass() {
+        return ${entity.name}StoreRepository.class;
+    }
+}

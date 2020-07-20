@@ -1,0 +1,58 @@
+#set($entity = ${Channel.get($key)})
+package $DEFAULT__ENTITY_MANAGER_DIRECTORY.value;
+
+#if(${entity.storePolicy.isCached()})
+import ${DEFAULT__ENTITY_REPO_DIRECTORY.value}.${entity.name}CacheRepository;
+#end
+#if(${entity.storePolicy.hasDatabase()})
+import ${DEFAULT__ENTITY_REPO_DIRECTORY.value}.${entity.name}StoreRepository;
+#end
+import ${DEFAULT__ENTITY_TYPE_DIRECTORY.value}.${entity.name};
+import ${DEFAULT__ENTITY_VIEW_DIRECTORY.value}.${entity.name}View;
+
+import java.util.Optional;
+
+#if(${entity.storePolicy.isAsync()})
+public class ${entity.name}ManagerTest extends AsyncEntityManagerTest<${entity.name}Manager, ${entity.name}View, ${entity.name}, ${entity.getIdField().getObject().getFQN()}>{
+#else
+public class ${entity.name}ManagerTest extends EntityManagerTest<${entity.name}Manager, ${entity.name}View, ${entity.name}, ${entity.getIdField().getObject().getFQN()}>{
+#end
+
+    @Override
+    public Optional<Class> storeRepo() {
+        #if(${entity.storePolicy.hasDatabase()})
+        return Optional.of(${entity.name}StoreRepository.class);
+        #else
+        return Optional.empty();
+        #end
+    }
+
+    @Override
+    public Optional<Class> cacheRepo() {
+        #if(${entity.storePolicy.isCached()})
+        return Optional.of(${entity.name}CacheRepository.class);
+        #else
+        return Optional.empty();
+        #end
+    }
+
+    @Override
+    public Class<${entity.name}Manager> managerClass() {
+        return ${entity.name}Manager.class;
+    }
+
+    @Override
+    public Class<${entity.name}View> viewClass() {
+        return ${entity.name}View.class;
+    }
+
+    @Override
+    public ${entity.name} entity() {
+        return new ${entity.name}();
+    }
+
+    @Override
+    public Class<${entity.getIdField().getObject().getFQN()}> idClass() {
+        return ${entity.getIdField().getObject().getFQN()}.class;
+    }
+}

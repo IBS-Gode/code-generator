@@ -12,6 +12,7 @@ public interface CodeGenerationComponent {
         RELATIONSHIP,
         APP_MIGRATION("liquibase.properties"),
         PIPELINE,
+        TEST_CASE,
         ADMIN("application.properties");
 
         private @Getter final String controlFile;

@@ -1,0 +1,40 @@
+#set($containerApp=${CodeAppUtil.containerAppName($TEST_CASE.app).toLowerCase()})
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>$containerApp</artifactId>
+        <groupId>$DEFAULT_GROUP_ID.value</groupId>
+        <version>$TEST_CASE.app.version</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>$TEST_CASE.name.toLowerCase()</artifactId>
+    <version>$TEST_CASE.version</version>
+    <packaging>jar</packaging>
+
+<dependencies>
+    <dependency>
+        <groupId>$DEFAULT_GROUP_ID.value</groupId>
+        <artifactId>gode-test</artifactId>
+        <version>${gode.version}</version>
+    </dependency>
+    #foreach($entity in $TEST_CASE.entities)
+        <dependency>
+            <groupId>$DEFAULT_GROUP_ID.value</groupId>
+            <artifactId>$entity.name.toLowerCase()</artifactId>
+        </dependency>
+    #end
+    <dependency>
+        <groupId>$DEFAULT_GROUP_ID.value</groupId>
+        <artifactId>$TEST_CASE.app.name.toLowerCase()</artifactId>
+        <version>$TEST_CASE.app.version</version>
+    </dependency>
+    <dependency>
+        <groupId>$DEFAULT_GROUP_ID.value</groupId>
+        <artifactId>${TEST_CASE.app.name.toLowerCase()}-functions</artifactId>
+    </dependency>
+</dependencies>
+</project>

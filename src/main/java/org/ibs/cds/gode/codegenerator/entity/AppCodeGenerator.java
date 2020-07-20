@@ -29,6 +29,7 @@ public class AppCodeGenerator {
         CodeApp app = new CodeApp(rawApp, buildModel);
         CodeAdminApp codeAdminApp = new CodeAdminApp(app, buildModel);
         CodeAppPipeline pipeline = new CodeAppPipeline(app, buildModel);
+        CodeAppTestCase codeAppTestCase = new CodeAppTestCase(app, buildModel);
 
         EngineConfiguration configuration = new EngineConfiguration(buildModel);
         String repo = app.getVersion().toString();
@@ -39,6 +40,7 @@ public class AppCodeGenerator {
         VelocityGeneratorEngine<CodeApp> codeAppVelocityGeneratorEngine = new VelocityGeneratorEngine(configuration, repo);
         VelocityGeneratorEngine<CodeAdminApp> codeAdminAppVelocityGeneratorEngine = new VelocityGeneratorEngine(configuration, repo);
         VelocityGeneratorEngine<CodeAppPipeline> codeAppPipelineGeneratorEngine = new VelocityGeneratorEngine(configuration, repo);
+        VelocityGeneratorEngine<CodeAppTestCase> codeAppTestCaseVelocityGeneratorEngine = new VelocityGeneratorEngine(configuration, repo);
 
         commonProperties(
                 codeEntityVelocityGeneratorEngine,
@@ -46,7 +48,8 @@ public class AppCodeGenerator {
                 codeAppVelocityGeneratorEngine,
                 codeAdminAppVelocityGeneratorEngine,
                 relationshipVelocityGeneratorEngine,
-                codeAppPipelineGeneratorEngine
+                codeAppPipelineGeneratorEngine,
+                codeAppTestCaseVelocityGeneratorEngine
         );
 
         codeEntityVelocityGeneratorEngine.addToContext("app", app);
@@ -73,6 +76,8 @@ public class AppCodeGenerator {
 
         BinaryStatus codeAdminStatus = codeAdminAppVelocityGeneratorEngine.run(codeAdminApp);
 
+        BinaryStatus codeAppTestCaseBuildStatus = codeAppTestCaseVelocityGeneratorEngine.run(codeAppTestCase);
+
         BinaryStatus codeAppBuildStatus = BinaryStatus.valueOf(codeAppVelocityGeneratorEngine.getBuildable().stream()
                 .map(buildable -> ArtefactBinding.resolve(buildModel.getArtifactPackaging()).run(buildable))
                 .allMatch(k -> k));
@@ -81,7 +86,8 @@ public class AppCodeGenerator {
                 && codeAppStatus.isSuccess()
                 && relationshipGenerationStatus.isSuccess()
                 && codeAdminStatus.isSuccess()
-                && codeAppBuildStatus.isSuccess();
+                && codeAppBuildStatus.isSuccess()
+                && codeAppTestCaseBuildStatus.isSuccess();
 
         if (buildModel.isPipelineGeneration() && !buildModel.isInherited()) {
             BinaryStatus codePipelineStatus = codeAppPipelineGeneratorEngine.run(pipeline);

@@ -1,0 +1,36 @@
+#set($entity = $Channel.get($key))
+package $DEFAULT__ENTITY_CONTROLLER_DIRECTORY.value;
+
+import ${DEFAULT__ENTITY_MANAGER_DIRECTORY.value}.${entity.name}Manager;
+#if(${entity.storePolicy.isCached()})
+import ${DEFAULT__ENTITY_REPO_DIRECTORY.value}.${entity.name}CacheRepository;
+#end
+#if(${entity.storePolicy.hasDatabase()})
+import ${DEFAULT__ENTITY_REPO_DIRECTORY.value}.${entity.name}StoreRepository;
+#end
+import ${DEFAULT__ENTITY_VIEW_DIRECTORY.value}.${entity.name}View;
+
+import java.util.Optional;
+
+public class ${entity.name}ProcessControllerTest extends EntityProcessControllerTest<${entity.name}ProcessController, ${entity.name}Manager, ${entity.name}View,${entity.getIdField().getObject().getFQN()}> {
+
+    @Override
+    public Class<${entity.name}Manager> managerClass() {
+        return ${entity.name}Manager.class;
+    }
+
+    @Override
+    public Class<${entity.name}ProcessController> controllerClass() {
+        return ${entity.name}ProcessController.class;
+    }
+
+    @Override
+    public Class<${entity.getIdField().getObject().getFQN()}> idClass() {
+        return ${entity.getIdField().getObject().getFQN()}.class;
+    }
+
+    @Override
+    public ${entity.name}View view() {
+        return new ${entity.name}View();
+    }
+}

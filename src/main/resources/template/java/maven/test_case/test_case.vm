@@ -1,0 +1,58 @@
+#set($testName=${TEST_CASE.getName().toLowerCase()})
+#set($projectName=${CodeAppUtil.containerAppName($TEST_CASE.app).toLowerCase()})
+#set($testPath = ${CodeAppUtil.testPath()})
+
+configuration:
+  - name: pom.xml
+    path: ${PathPackage.path($projectName, $testName)}
+    template: pom.vm
+    buildable: false
+#foreach($entity in $TEST_CASE.entities)
+
+#if(${entity.storePolicy.isAvailable()})
+
+#if(${entity.storePolicy.hasDatabase()})
+$Channel.put("${entity.name}SRepoTestKey", $entity)
+  - name: ${entity.name}StoreRepositoryTest.java
+    path: ${DEFAULT__ENTITY_REPO_DIRECTORY.pathOf($projectName, $testName, $$testPath)}
+    template: entity_store_repository_test.vm
+    key: ${entity.name}SRepoTestKey
+    buildable: false
+#end
+
+#if(${entity.storePolicy.isCached()})
+$Channel.put("${entity.name}CRepoTestKey", $entity)
+  - name: ${entity.name}CacheRepositoryTest.java
+    path: ${DEFAULT__ENTITY_REPO_DIRECTORY.pathOf($projectName, $testName, $$testPath)}
+    template: entity_cache_repository_test.vm
+    key: ${entity.name}CRepoTestKey
+    buildable: false
+#end
+
+$Channel.put("${entity.name}SControllerTestKey", $entity)
+  - name: ${entity.name}StateControllerTest.java
+    path: ${DEFAULT__ENTITY_CONTROLLER_DIRECTORY.pathOf($projectName, $testName, $$testPath)}
+    template: entity_state_controller_test.vm
+    key: ${entity.name}SControllerTestKey
+    buildable: false
+$Channel.put("${entity.name}ManagerTestKey", $entity)
+  - name: ${entity.name}ManagerTest.java
+    path: ${DEFAULT__ENTITY_MANAGER_DIRECTORY.pathOf($projectName, $testName, $$testPath)}
+    template: entity_manager_test.vm
+    key: ${entity.name}ManagerTestKey
+    buildable: false
+#else
+$Channel.put("${entity.name}PControllerTestKey", $entity)
+  - name: ${entity.name}ProcessControllerTest.java
+    path: ${DEFAULT__ENTITY_CONTROLLER_DIRECTORY.pathOf($projectName, $testName, $$testPath)}
+    template: entity_process_controller_test.vm
+    key: ${entity.name}PControllerTestKey
+    buildable: false
+$Channel.put("${entity.name}ManagerTestKey", $entity)
+  - name: ${entity.name}ManagerTest.java
+    path: ${DEFAULT__ENTITY_MANAGER_DIRECTORY.pathOf($projectName, $testName, $$testPath)}
+    template: entity_view_manager_test.vm
+    key: ${entity.name}ManagerTestKey
+    buildable: false
+#end
+#end

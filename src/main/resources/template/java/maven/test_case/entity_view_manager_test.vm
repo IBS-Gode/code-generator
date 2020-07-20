@@ -1,0 +1,25 @@
+#set($entity = ${Channel.get($key)})
+package $DEFAULT__ENTITY_MANAGER_DIRECTORY.value;
+
+
+import ${DEFAULT__ENTITY_VIEW_DIRECTORY.value}.${entity.name}View;
+
+import java.util.Optional;
+
+public class ${entity.name}ManagerTest extends EntityViewManagerTest<${entity.name}Manager, ${entity.name}View, ${entity.getIdField().getObject().getFQN()}>{
+
+    @Override
+    public Class<${entity.name}Manager> managerClass() {
+        return ${entity.name}Manager.class;
+    }
+
+    @Override
+    public Class<${entity.name}View> viewClass() {
+        return ${entity.name}View.class;
+    }
+
+    @Override
+    public Class<${entity.getIdField().getObject().getFQN()}> idClass() {
+        return ${entity.getIdField().getObject().getFQN()}.class;
+    }
+}
