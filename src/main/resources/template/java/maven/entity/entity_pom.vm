@@ -12,6 +12,8 @@
     "MONGODB")
 #set($entityStored=${ENTITY.getStorePolicy().isAvailable()})
 #set($entityCached=${ENTITY.getStorePolicy().isCached()})
+#set($entityCassandra=$entityStorePolicy.isAvailable() && $entityStorePolicy.getPolicy().getStoreName().getStoreType() ==
+    "CASSANDRA")
 
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -105,6 +107,28 @@
             </dependency>
         #end
 
+
+         #if($entityCassandra)
+                     <dependency>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-data-cassandra</artifactId>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.datastax.cassandra</groupId>
+                        <artifactId>cassandra-driver-core</artifactId>
+                        <version>3.7.2</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.querydsl</groupId>
+                        <artifactId>querydsl-jpa</artifactId>
+                    </dependency>
+                    <dependency>
+                        <groupId>javax.persistence</groupId>
+                        <artifactId>javax.persistence-api</artifactId>
+                        <version>2.2</version>
+                    </dependency>
+         #end
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -124,7 +148,7 @@
     <build>
         <plugins>
 
-            #if(${entityStorePolicy.isAvailable()})
+            #if(${entityStorePolicy.isDynamicQueryAvailable()})
                 <plugin>
                     <groupId>com.mysema.maven</groupId>
                     <artifactId>apt-maven-plugin</artifactId>

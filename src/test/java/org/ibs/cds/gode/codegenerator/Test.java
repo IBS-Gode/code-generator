@@ -122,6 +122,22 @@ public class Test {
         statefulEntitySpec3.setIdField(idField);
         statefulEntitySpec3.setState(state3);
 
+        EntityState state4 = new EntityState();
+        state4.setOpsLevel(new OperationLevel(Level.HIGH, Level.MEDIUM, Level.LOW, false, false));
+        EntityStateStore test3 = new EntityStateStore();
+        test3.setStoreName(StoreName.CASSANDRA);
+        test3.setAsyncStoreSync(true);
+        test3.setCached(true);
+        state4.setEntityStateStore(test3);
+
+        StatefulEntitySpec statefulEntitySpec4 = new StatefulEntitySpec();
+        statefulEntitySpec4.setName("Entity4");
+        statefulEntitySpec4.setDescription("Entity 4 descr");
+        statefulEntitySpec4.setVersion(5L);
+        statefulEntitySpec4.setFields(List.of(field));
+        statefulEntitySpec4.setIdField(idField);
+        statefulEntitySpec4.setState(state4);
+
         RelationshipEntitySpec relationshipEntitySpec = new RelationshipEntitySpec();
         relationshipEntitySpec.setName("ParentCustomerRelationship");
         relationshipEntitySpec.setType(RelationshipType.ONE_TO_MANY);
@@ -155,8 +171,8 @@ public class Test {
         App app = new App();
         app.setName("App1");
         app.setDescription("App1 description");
-        app.setVersion(5L);
-        app.setEntities(List.of(statefulEntitySpec, statefulEntitySpec2, statefulEntitySpec3));
+        app.setVersion(6L);
+        app.setEntities(List.of(statefulEntitySpec, statefulEntitySpec2, statefulEntitySpec3, statefulEntitySpec4));
         app.setFunctions(List.of(function, function2));
         app.setRelationships(List.of(relationshipEntitySpec));
         return AB.of(app, relationshipEntitySpec);

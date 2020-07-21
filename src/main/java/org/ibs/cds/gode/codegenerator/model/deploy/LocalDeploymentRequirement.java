@@ -114,6 +114,17 @@ public enum LocalDeploymentRequirement {
 
     TEAMS_NOTIFICATION_WEBHOOKS_URL(c -> true, "Teams Notification Webhooks Url","teamsWebhooksUrl", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.ADMIN, "spring.boot.admin.notify.slack.webhook-url")),
+    CASSANDRA_PORT(requireCassandra(), "Cassandra port","cassandraPort", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.APP, "spring.data.cassandra.port")),
+
+    CASSANDRA_USERNAME(requireCassandra(), "Cassandra username","cassandraUsername", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.APP, "spring.data.cassandra.username")),
+
+    CASSANDRA_PASSWORD(requireCassandra(), "Cassandra username","cassandraPassword", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.APP, "spring.data.cassandra.password")),
+
+    CASSANDRA_URI(requireCassandra(), "Cassandra URI", "cassandraContactPoint", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.APP, "spring.data.cassandra.contact-points")),
 
     ;
 
@@ -182,6 +193,11 @@ public enum LocalDeploymentRequirement {
                 .stream(LocalDeploymentRequirement.values())
                 .filter(k -> k.entryCriteria.test(app))
                 .collect(Collectors.toMap(s -> s.propertyName, s -> s.getLabel()));
+    }
+
+    @NotNull
+    private static Predicate<CodeApp> requireCassandra() {
+        return c -> c.getFeatures().isCassandraRequired();
     }
 
     @Override

@@ -42,6 +42,9 @@ import org.ibs.cds.gode.entity.cache.CacheEntity;
         private @$storeEssentials.idAnnotation.name $idFieldType $idFieldName;
 #elseif($isCached)
     public class $entityGivenName extends CacheEntity<$idFieldType> {
+        #if($storeEssentials && $storeEssentials.isCassandra())
+          @org.springframework.data.cassandra.core.mapping.Column
+        #end
         private @KeyId $idFieldType $idFieldName;
 #else
     public class $entityGivenName extends EntityView<$idFieldType> {
@@ -51,6 +54,9 @@ import org.ibs.cds.gode.entity.cache.CacheEntity;
     #foreach($field in $ENTITY.fields)
         #set($fieldName = $field.getObject().getName())
         #set($fieldType = $field.getObject().getFQN())
+     #if($storeEssentials && $storeEssentials.isCassandra())
+     @org.springframework.data.cassandra.core.mapping.Column
+     #end
      #if($field.objectField && $storeEssentials.isJPA())
      @javax.persistence.Embedded
      #end
