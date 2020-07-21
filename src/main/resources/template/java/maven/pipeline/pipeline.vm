@@ -1,7 +1,8 @@
 #set($projectName=${CodeAppUtil.containerAppName($PIPELINE.app).toLowerCase()})
 #set($pipelinePath=${CodeAppUtil.pipelinePath()})
+#set($type = ${PIPELINE.nature})
 configuration:
   - name: Pipeline
-    path: ${PathPackage.path($projectName, $pipelinePath)}
+    path: ${PathPackage.path($projectName, $type, $pipelinePath)}
     template: pipeline_jenkins.vm
     buildable: false

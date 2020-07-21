@@ -4,25 +4,42 @@ import lombok.Getter;
 import org.ibs.cds.gode.util.StringUtils;
 
 public interface CodeGenerationComponent {
+    String CUSTOMISE = "customise";
+    String FRAMEWORK = "framework";
 
     enum ComponentName{
-        APP("gode.properties"),
-        ENTITY,
-        APP_FUNCTION,
-        RELATIONSHIP,
-        APP_MIGRATION("liquibase.properties"),
-        PIPELINE,
-        TEST_CASE,
-        ADMIN("application.properties");
+        APP("gode.properties", false),
+        ENTITY(false),
+        APP_FUNCTION(true),
+        RELATIONSHIP(false),
+        APP_MIGRATION("liquibase.properties", false),
+        PIPELINE(true),
+        TEST_CASE(true),
+        ADMIN("application.properties", false);
 
         private @Getter final String controlFile;
-        ComponentName( String controlFile) {
+        private @Getter final String nature;
+
+        ComponentName( String controlFile, boolean customisable) {
             this.controlFile = controlFile;
+            if(customisable){
+                this.nature = CUSTOMISE.intern();
+            }else{
+                this.nature = FRAMEWORK.intern();
+            }
         }
         ComponentName() {
             this.controlFile = StringUtils.EMPTY;
+            this.nature = FRAMEWORK.intern();
         }
+        ComponentName(boolean customisable) {
+            this(StringUtils.EMPTY, customisable);
+        }
+
     }
 
     ComponentName getComponentName();
+    default String getNature(){
+        return getComponentName().getNature();
+    }
 }

@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ibs.cds.gode.codegenerator.api.usage.CodeGeneratorApi;
 import org.ibs.cds.gode.codegenerator.entity.CodeApp;
+import org.ibs.cds.gode.codegenerator.entity.CodeAppUtil;
 import org.ibs.cds.gode.codegenerator.ide.CloudIDE;
 import org.ibs.cds.gode.codegenerator.ide.Terminal;
 import org.ibs.cds.gode.codegenerator.model.checkin.CheckInComplete;
@@ -16,6 +17,7 @@ import org.ibs.cds.gode.entity.type.App;
 import org.ibs.cds.gode.entity.type.BuildData;
 import org.ibs.cds.gode.entity.type.Specification;
 import org.ibs.cds.gode.util.Assert;
+import org.ibs.cds.gode.util.NetworkUtil;
 import org.ibs.cds.gode.web.Request;
 import org.ibs.cds.gode.web.Response;
 import org.jetbrains.annotations.NotNull;
@@ -50,6 +52,14 @@ public class CodeUtility {
     public Response<String> terminal(@RequestBody Request<Specification> appRequest) {
         CodeApp codedApp = getCodeApp(appRequest.getData());
         return Processor.successResponse(terminal.start(codedApp), appRequest, "/terminal");
+    }
+
+    @PostMapping(path = "/ide")
+    @ApiOperation(value = "Operation to open terminal")
+    public Response<String> ide(@RequestBody Request<Specification> appRequest) {
+        CodeApp codedApp = getCodeApp(appRequest.getData());
+        String port = String.valueOf(NetworkUtil.nextFreePort());
+        return Processor.successResponse(ide.runIDE(CodeAppUtil.customisableApp(codedApp), port), appRequest, "/ide");
     }
 
     @PostMapping(path = "/checkin")

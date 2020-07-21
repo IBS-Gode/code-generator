@@ -1,31 +1,32 @@
 #set($projectName=${CodeAppUtil.containerAppName($app).toLowerCase()})
 #set($javaPath = ${CodeAppUtil.javaPath()})
 #set($appFunctionName=${APP_FUNCTION.getName().toLowerCase()})
+#set($type = ${APP_FUNCTION.nature})
 configuration:
   - name: pom.xml
-    path: ${PathPackage.path($projectName,$appFunctionName)}
+    path: ${PathPackage.path($projectName,$type, $appFunctionName)}
     template: app_function_pom.vm
     buildable: false
   - name: ${app.name}Manager.java
-    path: ${DEFAULT__APP_FUNCTION_DIRECTORY.pathOf($projectName,$appFunctionName,$javaPath)}
+    path: ${DEFAULT__APP_FUNCTION_DIRECTORY.pathOf($projectName,$type,$appFunctionName,$javaPath)}
     template: app_function_manager.vm
     buildable: false
 #foreach($appFunction in $APP_FUNCTION.functions)
   $Channel.put("${appFunction.output.name}Key", $appFunction)
   - name: ${appFunction.output.name}.java
-    path: ${DEFAULT__APP_FUNCTION_DIRECTORY.pathOf($projectName,$appFunctionName,$javaPath)}
+    path: ${DEFAULT__APP_FUNCTION_DIRECTORY.pathOf($projectName,$type,$appFunctionName,$javaPath)}
     template: app_function_response.vm
     buildable: false
     key: ${appFunction.output.name}Key
   $Channel.put("${appFunction.input.name}Key", $appFunction)
   - name: ${appFunction.input.name}.java
-    path: ${DEFAULT__APP_FUNCTION_DIRECTORY.pathOf($projectName,$appFunctionName,$javaPath)}
+    path: ${DEFAULT__APP_FUNCTION_DIRECTORY.pathOf($projectName,$type,$appFunctionName,$javaPath)}
     template: app_function_request.vm
     buildable: false
     key: ${appFunction.input.name}Key
   $Channel.put("${appFunction.name}Key", $appFunction)
   - name: ${appFunction.name}.java
-    path: ${DEFAULT__APP_FUNCTION_DIRECTORY.pathOf($projectName,$appFunctionName,$javaPath)}
+    path: ${DEFAULT__APP_FUNCTION_DIRECTORY.pathOf($projectName,$type, $appFunctionName,$javaPath)}
     template: app_function_body.vm
     buildable: false
     key: ${appFunction.name}Key
