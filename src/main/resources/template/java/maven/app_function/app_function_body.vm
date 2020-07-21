@@ -1,6 +1,9 @@
 #set($function = $Channel.get($key))
 
-package ${DEFAULT__APP_FUNCTION_DIRECTORY.value};
+package ${DEFAULT__APP_FUNCTION_DIRECTORY.value}.${function.name.toLowerCase()};
+
+import ${DEFAULT__APP_FUNCTION_DIRECTORY.value}.${app.name}Manager;
+import ${DEFAULT__APP_FUNCTION_DIRECTORY.value}.AppFunctionBody;
 
 public class ${function.name} extends AppFunctionBody<${function.input.name}, ${app.name}Manager, ${function.output.name}>{
 

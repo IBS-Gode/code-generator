@@ -1,6 +1,6 @@
 #set($function = $Channel.get($key))
 
-package ${DEFAULT__APP_FUNCTION_DIRECTORY.value};
+package ${DEFAULT__APP_FUNCTION_DIRECTORY.value}.${function.name.toLowerCase()};
 
 import lombok.Data;
 #foreach($object in $function.input.body)
