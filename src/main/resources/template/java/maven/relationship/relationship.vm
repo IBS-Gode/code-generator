@@ -6,40 +6,41 @@
 #set($projectName=${CodeAppUtil.containerAppName($app).toLowerCase()})
 #set($projectVersion=${app.getVersion()})
 #set($javaPath = ${CodeAppUtil.javaPath()})
+#set($type = ${RELATIONSHIP.nature})
 configuration:
   - name: pom.xml
-    path: ${PathPackage.path($projectName,$relationship_lc)}
+    path: ${PathPackage.path($projectName,$type,$relationship_lc)}
     template: relationship_pom.vm
     buildable: false
   - name: ${relationship}.java
-    path: ${DEFAULT__ENTITY_TYPE_DIRECTORY.pathOf($projectName,$relationship_lc,$javaPath)}
+    path: ${DEFAULT__ENTITY_TYPE_DIRECTORY.pathOf($projectName,$type,$relationship_lc,$javaPath)}
     template: relationship_entity_type.vm
     buildable: false
   - name: ${relationshipView}.java
-    path: ${DEFAULT__ENTITY_VIEW_DIRECTORY.pathOf($projectName,$relationship_lc,$javaPath)}
+    path: ${DEFAULT__ENTITY_VIEW_DIRECTORY.pathOf($projectName,$type,$relationship_lc,$javaPath)}
     template: relationship_entity_view_type.vm
     buildable: false
   - name: ${relationship}Manager.java
-    path: ${DEFAULT__ENTITY_MANAGER_DIRECTORY.pathOf($projectName,$relationship_lc,$javaPath)}
+    path: ${DEFAULT__ENTITY_MANAGER_DIRECTORY.pathOf($projectName,$type,$relationship_lc,$javaPath)}
     template: relationship_manager.vm
     buildable: false
   - name: ${relationship}StoreRepo.java
-    path: ${DEFAULT__ENTITY_REPO_DIRECTORY.pathOf($projectName,$relationship_lc,$javaPath)}
+    path: ${DEFAULT__ENTITY_REPO_DIRECTORY.pathOf($projectName,$type,$relationship_lc,$javaPath)}
     template: relationship_repo.vm
     buildable: false
   - name: ${relationship}StoreRepository.java
-    path: ${DEFAULT__ENTITY_REPO_DIRECTORY.pathOf($projectName,$relationship_lc,$javaPath)}
+    path: ${DEFAULT__ENTITY_REPO_DIRECTORY.pathOf($projectName,$type,$relationship_lc,$javaPath)}
     template: relationship_repository.vm
     buildable: false
   - name: ${relationship}GraphManager.java
-    path: ${DEFAULT__ENTITY_GQL_DIRECTORY.pathOf($projectName,$relationship_lc,$javaPath)}
+    path: ${DEFAULT__ENTITY_GQL_DIRECTORY.pathOf($projectName,$type,$relationship_lc,$javaPath)}
     template: relationship_graph_manager.vm
     buildable: false
   - name: ${relationship}Request.java
-    path: ${DEFAULT__ENTITY_GQL_DIRECTORY.pathOf($projectName,$relationship_lc,$javaPath)}
+    path: ${DEFAULT__ENTITY_GQL_DIRECTORY.pathOf($projectName,$type,$relationship_lc,$javaPath)}
     template: relationship_graph_request.vm
     buildable: false
   - name: ${relationship}StateController.java
-    path: ${DEFAULT__ENTITY_CONTROLLER_DIRECTORY.pathOf($projectName,$relationship_lc,$javaPath)}
+    path: ${DEFAULT__ENTITY_CONTROLLER_DIRECTORY.pathOf($projectName,$type,$relationship_lc,$javaPath)}
     template: relationship_controller.vm
     buildable: false

@@ -8,6 +8,7 @@
         <artifactId>$containerApp</artifactId>
         <groupId>$DEFAULT_GROUP_ID.value</groupId>
         <version>$TEST_CASE.app.version</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

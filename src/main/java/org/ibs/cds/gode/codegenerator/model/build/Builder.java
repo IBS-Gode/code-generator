@@ -1,8 +1,10 @@
 package org.ibs.cds.gode.codegenerator.model.build;
 
 import org.ibs.cds.gode.codegenerator.bind.ArtifactPackaging;
+import org.ibs.cds.gode.codegenerator.config.CodeGenerationComponent;
 import org.ibs.cds.gode.codegenerator.config.EngineConfiguration;
 import org.ibs.cds.gode.codegenerator.entity.AppCodeGenerator;
+import org.ibs.cds.gode.codegenerator.entity.CodeAppUtil;
 import org.ibs.cds.gode.codegenerator.entity.PathPackage;
 import org.ibs.cds.gode.codegenerator.exception.CodeGenerationFailure;
 import org.ibs.cds.gode.codegenerator.spec.ProgLanguage;
@@ -69,7 +71,6 @@ public class Builder {
     }
 
     public String runIDE(App foundApp, String port) {
-        String path = PathPackage.path(EngineConfiguration.getCodeGenPath(), foundApp.getVersion().toString(), foundApp.getName().concat("-container").toLowerCase(), foundApp.getName().concat("-functions").toLowerCase());
-        return ide.runIDE(path, port);
+        return ide.runIDE(CodeAppUtil.customisableApp(foundApp), port);
     }
 }

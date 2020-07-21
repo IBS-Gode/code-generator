@@ -4,44 +4,45 @@
 #set($javaPath = ${CodeAppUtil.javaPath()})
 #set($resourcePath = ${CodeAppUtil.javaResourcePath()})
 #set($graphqlPath = ${CodeAppUtil.graphqlPath()})
+#set($type = ${APP.nature})
 configuration:
   - name: pom.xml
     path: ${PathPackage.path($projectName)}
     template: parent_pom.vm
     buildable: true
   - name: pom.xml
-    path: ${PathPackage.path($projectName,$appName)}
+    path: ${PathPackage.path($projectName,$type, $appName)}
     template: app_pom.vm
     buildable: false
   - name: ${appGivenName}.java
-    path: ${DEFAULT__APP_DIRECTORY.pathOf($projectName,$appName,$javaPath)}
+    path: ${DEFAULT__APP_DIRECTORY.pathOf($projectName,$type, $appName,$javaPath)}
     template: main.vm
     buildable: false
   - name: ${appGivenName}Function.java
-    path: ${DEFAULT__APP_FUNCTION_DIRECTORY.pathOf($projectName,$appName,$javaPath)}
+    path: ${DEFAULT__APP_FUNCTION_DIRECTORY.pathOf($projectName,$type, $appName,$javaPath)}
     template: app_function.vm
     buildable: false
   - name: $APP.componentName.controlFile
-    path: ${PathPackage.path($projectName,$appName, $resourcePath)}
+    path: ${PathPackage.path($projectName, $type, $appName, $resourcePath)}
     template: gode_properties.vm
     buildable: false
   - name: root.graphqls
-    path: ${PathPackage.path($projectName,$appName, $graphqlPath)}
+    path: ${PathPackage.path($projectName, $type, $appName, $graphqlPath)}
     template: graphql.vm
     buildable: false
   - name: logback.xml
-    path: ${PathPackage.path($projectName,$appName, $resourcePath)}
+    path: ${PathPackage.path($projectName, $type, $appName, $resourcePath)}
     template: logback.vm
     buildable: false
 #if(${APP.secure})
   - name: public.txt
-    path: ${PathPackage.path($projectName,$appName, $resourcePath)}
+    path: ${PathPackage.path($projectName, $type, $appName, $resourcePath)}
     template: public_sample_key.vm
     buildable: false
 #end
 #if(${APP.features.jpaStoreRequired})
   - name: liquibase.properties
-    path: ${PathPackage.path($projectName,$appName, $resourcePath)}
+    path: ${PathPackage.path($projectName, $type, $appName, $resourcePath)}
     template: liquibase_properties.vm
     buildable: false
 #end

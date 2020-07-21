@@ -1,5 +1,6 @@
 package org.ibs.cds.gode.codegenerator.entity;
 
+import org.ibs.cds.gode.codegenerator.config.CodeGenerationComponent;
 import org.ibs.cds.gode.codegenerator.config.EngineConfiguration;
 import org.ibs.cds.gode.entity.type.App;
 
@@ -59,6 +60,14 @@ public class CodeAppUtil {
 
     public static String appPath(CodeApp app) {
         return appPath(app.getName(), String.valueOf(app.getVersion()));
+    }
+
+    public static String customisableApp(CodeApp app) {
+        return PathPackage.path(appPath(app.getName(), String.valueOf(app.getVersion())), CodeGenerationComponent.CUSTOMISE).toLowerCase();
+    }
+
+    public static String customisableApp(App app) {
+        return PathPackage.path(appPath(app.getName(), String.valueOf(app.getVersion())), CodeGenerationComponent.CUSTOMISE).toLowerCase();
     }
     
     public static String appPath(String appName, String appVersion) {

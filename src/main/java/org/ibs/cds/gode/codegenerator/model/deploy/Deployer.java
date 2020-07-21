@@ -2,6 +2,7 @@ package org.ibs.cds.gode.codegenerator.model.deploy;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
+import org.ibs.cds.gode.codegenerator.config.CodeGenerationComponent;
 import org.ibs.cds.gode.codegenerator.config.EngineConfiguration;
 import org.ibs.cds.gode.codegenerator.entity.CodeApp;
 import org.ibs.cds.gode.codegenerator.entity.CodeAppUtil;
@@ -25,8 +26,8 @@ public class Deployer {
             Map<String, String> localDeployment = model.getLocalDeploymentRequired();
             if (MapUtils.isNotEmpty(model.getLocalDeploymentRequired())) {
                 if (updateRequirement(app, localDeployment)) {
-                    String pom = PathPackage.path(EngineConfiguration.getCodeGenPath(), app.getVersion().toString(), CodeAppUtil.containerAppName(app).toLowerCase(), app.getName().toLowerCase(), "pom.xml");
-                    String adminPom = PathPackage.path(EngineConfiguration.getCodeGenPath(), app.getVersion().toString(), CodeAppUtil.containerAppName(app).toLowerCase(), CodeAppUtil.adminAppName(app).toLowerCase(), "pom.xml");
+                    String pom = PathPackage.path(EngineConfiguration.getCodeGenPath(), app.getVersion().toString(), CodeAppUtil.containerAppName(app).toLowerCase(), CodeGenerationComponent.ComponentName.APP.getNature(), app.getName().toLowerCase(), "pom.xml");
+                    String adminPom = PathPackage.path(EngineConfiguration.getCodeGenPath(), app.getVersion().toString(), CodeAppUtil.containerAppName(app).toLowerCase(), CodeGenerationComponent.ComponentName.ADMIN.getNature(), CodeAppUtil.adminAppName(app).toLowerCase(), "pom.xml");
                     CompletableFuture
                             .supplyAsync(()->{
                                 log.info("Deployment started with args:{}",adminPom);

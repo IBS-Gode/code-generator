@@ -35,7 +35,7 @@ public class Terminal {
     }
 
     public String start(CodeApp app) {
-        return start(CodeAppUtil.appPath(app));
+        return start(CodeAppUtil.customisableApp(app));
     }
 
 }
