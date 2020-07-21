@@ -10,6 +10,7 @@ public class CodeAppFeatures {
     private final boolean cacheRequired;
     private final boolean jpaStoreRequired;
     private final boolean mongoRequired;
+    private final boolean cassandraRequired;
     private final boolean statefulEntityIncluded;
     private final boolean statelessEntityIncluded;
     private final boolean relationshipEntityIncluded;
@@ -29,6 +30,8 @@ public class CodeAppFeatures {
         this.queueSystemRequired = app.isSystemQueue() ||
                 app.getEntities().stream().anyMatch(k -> k.getStorePolicy().isAsync());
         this.secure = app.isSecure();
+        this.cassandraRequired = app.getEntities().stream().anyMatch(k -> k.getStorePolicy().isAvailable() &&
+                k.getStorePolicy().getPolicy().getStoreName().getStoreType() == StoreType.CASSANDRA);
         this.autosequenceFields = app.getEntities().stream().flatMap(k->k.getFields().stream()).anyMatch(CodeEntityField::isAutosequence);
     }
 

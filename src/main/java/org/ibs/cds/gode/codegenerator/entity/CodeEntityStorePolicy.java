@@ -4,6 +4,7 @@ import lombok.Data;
 import org.apache.commons.collections4.CollectionUtils;
 import org.ibs.cds.gode.codegenerator.exception.CodeGenerationFailure;
 import org.ibs.cds.gode.codegenerator.model.build.BuildModel;
+import org.ibs.cds.gode.entity.store.StoreType;
 import org.ibs.cds.gode.entity.type.StatefulEntitySpec;
 import org.ibs.cds.gode.entity.type.EntityState;
 import org.ibs.cds.gode.entity.type.EntityStateStore;
@@ -25,6 +26,9 @@ public class CodeEntityStorePolicy implements ResolvedFromModel<StatefulEntitySp
         this.buildModel = buildModel;
     }
 
+    public boolean isDynamicQueryAvailable(){
+        return isAvailable() && (this.policy.getStoreName().getStoreType() == StoreType.JPA || this.policy.getStoreName().getStoreType() == StoreType.MONGODB);
+    }
     public boolean isAvailable() {
         return this.policy != null && !this.policy.isVolatileEntity();
     }

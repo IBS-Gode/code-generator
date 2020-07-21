@@ -28,6 +28,18 @@ gode.datastore.mongodb.database.name=
 gode.datastore.mongodb.enabled=false
 #end
 
+#if(${APP.features.cassandraRequired})
+gode.datastore.cassandra.enabled=true
+gode.datastore.cassandra.contact-points=
+gode.datastore.cassandra.port=
+gode.datastore.cassandra.username=
+gode.datastore.cassandra.password=
+gode.datastore.cassandra.keyspace=default
+gode.datastore.cassandra.schema-action=NONE
+#else
+gode.datastore.cassandra.enabled=false
+#end
+
 #if(${APP.features.queueSystemRequired})
 #QueueManagement
 gode.queue.kafka.enabled=true
