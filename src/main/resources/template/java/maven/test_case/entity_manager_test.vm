@@ -11,11 +11,13 @@ import ${DEFAULT__ENTITY_TYPE_DIRECTORY.value}.${entity.name};
 import ${DEFAULT__ENTITY_VIEW_DIRECTORY.value}.${entity.name}View;
 
 import java.util.Optional;
+import  ${DEFAULT__ENTITY_FUNCTION_DIRECTORY.value}.${entity.name}Function;
+import ${DEFAULT__ENTITY_FUNCTION_DIRECTORY.value}.${entity.name}FunctionBody;
 
 #if(${entity.storePolicy.isAsync()})
-public class ${entity.name}ManagerTest extends AsyncEntityManagerTest<${entity.name}Manager, ${entity.name}View, ${entity.name}, ${entity.getIdField().getObject().getFQN()}>{
+public class ${entity.name}ManagerTest extends AsyncEntityManagerTest<${entity.name}Manager, ${entity.name}View, ${entity.name}, ${entity.getIdField().getObject().getFQN()},${entity.name}FunctionBody>{
 #else
-public class ${entity.name}ManagerTest extends EntityManagerTest<${entity.name}Manager, ${entity.name}View, ${entity.name}, ${entity.getIdField().getObject().getFQN()}>{
+public class ${entity.name}ManagerTest extends EntityManagerTest<${entity.name}Manager, ${entity.name}View, ${entity.name}, ${entity.getIdField().getObject().getFQN()}, ${entity.name}FunctionBody>{
 #end
 
     @Override
@@ -55,4 +57,19 @@ public class ${entity.name}ManagerTest extends EntityManagerTest<${entity.name}M
     public Class<${entity.getIdField().getObject().getFQN()}> idClass() {
         return ${entity.getIdField().getObject().getFQN()}.class;
     }
+
+      @Override
+        public Class validationFunctionClass() {
+            return ${entity.name}FunctionBody.class;
+        }
+
+        @Override
+        public Class processFunctionClass() {
+            return ${entity.name}FunctionBody.class;
+        }
+
+        @Override
+        public ${entity.name}FunctionBody function() {
+            return new ${entity.name}Function();
+        }
 }

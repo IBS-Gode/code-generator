@@ -1,0 +1,34 @@
+#set($entityFunction = $Channel.get($key))
+package ${DEFAULT__ENTITY_FUNCTION_DIRECTORY.value};
+
+import org.ibs.cds.gode.entity.generic.DataMap;
+#if(${entityFunction.storeFunction})
+import ${DEFAULT__ENTITY_TYPE_DIRECTORY.value}.${entityFunction.entity.name};
+#end
+import org.ibs.cds.gode.entity.validation.ValidationStatus;
+import ${DEFAULT__ENTITY_VIEW_DIRECTORY.value}.${entityFunction.entity.name}View;
+import org.springframework.stereotype.Component;
+
+
+@Component
+public class ${entityFunction.entity.name}Function implements ${entityFunction.entity.name}FunctionBody {
+
+    #if(${entityFunction.storeFunction})
+    @Override
+    public ValidationStatus validateEntity(${entityFunction.entity.name} entity) {
+        return ValidationStatus.ok();
+    }
+    #end
+
+    @Override
+    public ValidationStatus validate(${entityFunction.entity.name}View view) {
+        return ValidationStatus.ok();
+    }
+
+    @Override
+    public DataMap process(${entityFunction.entity.name}View view) {
+        return DataMap.empty();
+    }
+
+}
+

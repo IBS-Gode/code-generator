@@ -78,7 +78,12 @@ $Channel.put("${object.name}RequestKey", $object)
     template: entity_view_controller.vm
     buildable: false
 #end
-
+$Channel.put("${entityGivenName}FunctionBody", $ENTITY)
+  - name: ${entityGivenName}FunctionBody.java
+    path: ${DEFAULT__ENTITY_FUNCTION_DIRECTORY.pathOf($projectName,$type,$entityName,$javaPath)}
+    template: entity_function_body.vm
+    buildable: false
+    key: ${entityGivenName}FunctionBody
 #if($isCached)
   - name: ${entityGivenName}CacheRepo.java
     path: ${DEFAULT__ENTITY_REPO_DIRECTORY.pathOf($projectName,$type,$entityName,$javaPath)}

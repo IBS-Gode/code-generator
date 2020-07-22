@@ -44,7 +44,7 @@ public class ${appGivenName}Function extends AppProcessEndpoint {
        @PostMapping(path = "/$appName/${function.methodName}")
        @ApiOperation("Function - ${function.methodName} operation")
        public Response<${function.output.name}> $function.methodName (@RequestBody Request<${function.input.name}> request){
-        return Processor.successResponse(${function.methodName}.process(request.getData(), manager), request,"/$appName/${function.methodName}");
+        return Processor.successResponse(${function.methodName}.run(request.getData(), manager), request,"/$appName/${function.methodName}");
        }
     #end
 

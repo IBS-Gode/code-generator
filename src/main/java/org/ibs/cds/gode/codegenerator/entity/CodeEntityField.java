@@ -6,7 +6,6 @@ import org.ibs.cds.gode.codegenerator.model.build.BuildModel;
 import org.ibs.cds.gode.codegenerator.spec.GraphQLUtil;
 import org.ibs.cds.gode.entity.type.EntityField;
 import org.ibs.cds.gode.entity.type.FieldType;
-import org.ibs.cds.gode.util.Assert;
 
 @Data
 public class CodeEntityField extends CodeField implements ResolvedFromModel<EntityField, LangObject>{

@@ -22,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ${DEFAULT__ENTITY_VIEW_DIRECTORY.value}.${entityViewGivenName};
 import org.springframework.stereotype.Service;
 import java.util.Optional;
+import ${DEFAULT__ENTITY_FUNCTION_DIRECTORY.value}.${entityGivenName}FunctionBody;
+import org.ibs.cds.gode.system.GodeAppEnvt;
 
 @Service
 #if($entityStorePolicy.isAvailable())
@@ -72,5 +74,16 @@ public ${entityGivenName} transformFields(${entityViewGivenName} view) {
 }
 #end
 
+   #if($entityStateStored)
+   @Override
+    public Optional<${entityGivenName}FunctionBody> validationFunction() {
+        return Optional.of(GodeAppEnvt.getObject(${entityGivenName}FunctionBody.class));
+    }
+    #end
+
+    @Override
+    public Optional<${entityGivenName}FunctionBody> processFunction() {
+        return Optional.of(GodeAppEnvt.getObject(${entityGivenName}FunctionBody.class));
+    }
 
 }

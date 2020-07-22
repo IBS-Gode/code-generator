@@ -4,6 +4,7 @@ package ${DEFAULT__APP_FUNCTION_DIRECTORY.value}.${function.name.toLowerCase()};
 
 import ${DEFAULT__APP_FUNCTION_DIRECTORY.value}.${app.name}Manager;
 import ${DEFAULT__APP_FUNCTION_DIRECTORY.value}.AppFunctionBody;
+import org.ibs.cds.gode.entity.validation.ValidationStatus;
 
 public class ${function.name} extends AppFunctionBody<${function.input.name}, ${app.name}Manager, ${function.output.name}>{
 
@@ -11,5 +12,10 @@ public class ${function.name} extends AppFunctionBody<${function.input.name}, ${
     public ${function.output.name} process(${function.input.name} request,
                                             ${app.name}Manager manager) {
         return new ${function.output.name}();
+    }
+
+    @Override
+    public ValidationStatus validate(${function.input.name} request) {
+        return ValidationStatus.ok();
     }
 }

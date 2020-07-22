@@ -171,7 +171,7 @@ public class Test {
         App app = new App();
         app.setName("App1");
         app.setDescription("App1 description");
-        app.setVersion(7L);
+        app.setVersion(10L);
         app.setEntities(List.of(statefulEntitySpec, statefulEntitySpec2, statefulEntitySpec3, statefulEntitySpec4));
         app.setFunctions(List.of(function, function2));
         app.setRelationships(List.of(relationshipEntitySpec));

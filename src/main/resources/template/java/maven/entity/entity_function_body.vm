@@ -1,0 +1,17 @@
+#set($entity = ${Channel.get($key)})
+
+package ${DEFAULT__ENTITY_FUNCTION_DIRECTORY.value};
+
+#if(${entity.storePolicy.isAvailable()})
+import ${DEFAULT__ENTITY_TYPE_DIRECTORY.value}.${entity.name};
+#end
+import ${DEFAULT__ENTITY_VIEW_DIRECTORY.value}.${entity.name}View;
+
+#if(${entity.storePolicy.isAvailable()})
+public interface ${entity.name}FunctionBody extends EntityFunctionBody<${entity.name}View>, EntityValidation<${entity.name}>{
+#else
+public interface ${entity.name}FunctionBody extends EntityFunctionBody<${entity.name}View>{
+#end
+
+}
+

@@ -23,6 +23,9 @@ import ${DEFAULT__ENTITY_TYPE_DIRECTORY.value}.${entityGivenName};
 import ${DEFAULT__ENTITY_VIEW_DIRECTORY.value}.${entityViewGivenName};
 import org.springframework.stereotype.Service;
 import java.util.Optional;
+import java.util.Optional;
+import ${DEFAULT__ENTITY_FUNCTION_DIRECTORY.value}.${entityGivenName}FunctionBody;
+import org.ibs.cds.gode.system.GodeAppEnvt;
 
 @Service
 #if($entityStorePolicy.isAvailable())
@@ -73,5 +76,15 @@ return entity;
 }
 #end
 
+
+   @Override
+    public Optional<${entityGivenName}FunctionBody> validationFunction() {
+        return Optional.of(GodeAppEnvt.getObject(${entityGivenName}FunctionBody.class));
+    }
+
+    @Override
+    public Optional<${entityGivenName}FunctionBody> processFunction() {
+        return Optional.of(GodeAppEnvt.getObject(${entityGivenName}FunctionBody.class));
+    }
 
 }

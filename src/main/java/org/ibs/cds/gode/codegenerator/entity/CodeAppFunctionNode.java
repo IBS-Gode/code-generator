@@ -16,9 +16,10 @@ public class CodeAppFunctionNode extends Specification implements Buildable, Cod
 
     private BuildModel buildModel;
     private Set<CodeAppFunction> functions;
+    private Set<CodeEntityFunction> entityFunctions;
 
 
-    public CodeAppFunctionNode(App app, BuildModel buildModel) {
+    public CodeAppFunctionNode(App app, BuildModel buildModel, Set<CodeEntityFunction> entityFunctions) {
         this.buildModel = buildModel;
         this.setName(app.getName().concat("-").concat("functions").toLowerCase());
         this.setVersion(app.getVersion());
@@ -26,6 +27,7 @@ public class CodeAppFunctionNode extends Specification implements Buildable, Cod
         this.functions = CollectionUtils.isEmpty(functions) ?
                 Set.of() :
                 functions.stream().map(CodeAppFunction::new).collect(Collectors.toSet());
+        this.entityFunctions = entityFunctions;
     }
 
     @Override

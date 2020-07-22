@@ -32,3 +32,11 @@ $Channel.put("${appFunction.name}Key", $appFunction)
     buildable: false
     key: ${appFunction.name}Key
 #end
+#foreach($entityFunction in $APP_FUNCTION.entityFunctions)
+$Channel.put("${entityFunction.entity.name}FunctionAppKey", $entityFunction)
+  - name: ${entityFunction.entity.name}Function.java
+    path: ${DEFAULT__ENTITY_FUNCTION_DIRECTORY.pathOf($projectName,$type,$appFunctionName,$javaPath)}
+    template: entity_function_body.vm
+    buildable: false
+    key: ${entityFunction.entity.name}FunctionAppKey
+#end

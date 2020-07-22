@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.ibs.cds.gode.entity.function.EntityFunctionBody;
+import org.ibs.cds.gode.entity.function.EntityValidation;
 
 @Service
 public class AppManager extends PureEntityManager<App, Long> {
@@ -28,5 +31,15 @@ public class AppManager extends PureEntityManager<App, Long> {
         AppRepository repo = repository.get();
         List<App> all = repo.findAll();
         return all == null ? Collections.emptyList() : all.stream().map(transformer).collect(Collectors.toList());
+    }
+
+    @Override
+    public <Function extends EntityValidation<App>> Optional<Function> validationFunction() {
+           return Optional.empty();
+    }
+
+    @Override
+    public <Function extends EntityFunctionBody<App>> Optional<Function> processFunction() {
+        return Optional.empty();
     }
 }

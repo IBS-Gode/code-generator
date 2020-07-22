@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import org.ibs.cds.gode.codegenerator.model.build.BuildModel;
+import org.ibs.cds.gode.entity.function.EntityFunctionBody;
+import org.ibs.cds.gode.entity.function.EntityValidation;
 
 @Service
 public class BuildDataManager extends PureEntityManager< BuildData, Long> {
@@ -57,5 +59,15 @@ public class BuildDataManager extends PureEntityManager< BuildData, Long> {
             return super.doSave(Optional.of(entity));
         }).orElse(Optional.empty());
 
+    }
+
+    @Override
+    public <Function extends EntityValidation<BuildData>> Optional<Function> validationFunction() {
+        return Optional.empty();
+    }
+
+    @Override
+    public <Function extends EntityFunctionBody<BuildData>> Optional<Function> processFunction() {
+        return Optional.empty();
     }
 }

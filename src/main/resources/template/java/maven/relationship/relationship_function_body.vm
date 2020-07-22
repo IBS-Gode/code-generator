@@ -1,0 +1,12 @@
+#set($relationship = ${Channel.get($key)})
+
+package ${DEFAULT__ENTITY_FUNCTION_DIRECTORY.value};
+
+import ${DEFAULT__ENTITY_TYPE_DIRECTORY.value}.${relationship.name};
+import ${DEFAULT__ENTITY_VIEW_DIRECTORY.value}.${relationship.name}View;
+
+public interface ${relationship.name}FunctionBody extends EntityFunctionBody<${relationship.name}View>, EntityValidation<${relationship.name}>{
+
+
+}
+

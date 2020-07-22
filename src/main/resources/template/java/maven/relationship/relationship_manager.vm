@@ -24,6 +24,9 @@ import ${DEFAULT__ENTITY_REPO_DIRECTORY.value}.${relationship}StoreRepository;
 
 import org.springframework.stereotype.Service;
 import java.util.Optional;
+import ${DEFAULT__ENTITY_FUNCTION_DIRECTORY.value}.${relationship}FunctionBody;
+import org.ibs.cds.gode.system.GodeAppEnvt;
+
 
 @Service
 public class ${relationship}Manager extends ${relationshipEssentials.manager.name}<${relationshipView}, ${relationship}, $startNode.entityViewName, $endNode.entityViewName, $startNode.idField.object.getFQN(), $endNode.idField.object.getFQN()> {
@@ -54,5 +57,16 @@ relationship.set${fieldName}(view.get${fieldName}());
 #end
 return relationship;
 }
+
+  
+   @Override
+    public Optional<${relationship}FunctionBody> validationFunction() {
+        return Optional.of(GodeAppEnvt.getObject(${relationship}FunctionBody.class));
+    }
+
+    @Override
+    public Optional<${relationship}FunctionBody> processFunction() {
+        return Optional.of(GodeAppEnvt.getObject(${relationship}FunctionBody.class));
+    }
 
 }

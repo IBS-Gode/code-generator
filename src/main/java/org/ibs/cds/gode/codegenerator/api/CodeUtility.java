@@ -55,7 +55,7 @@ public class CodeUtility {
     }
 
     @PostMapping(path = "/ide")
-    @ApiOperation(value = "Operation to open terminal")
+    @ApiOperation(value = "Operation to open ide")
     public Response<String> ide(@RequestBody Request<Specification> appRequest) {
         CodeApp codedApp = getCodeApp(appRequest.getData());
         String port = String.valueOf(NetworkUtil.nextFreePort());

@@ -44,3 +44,9 @@ configuration:
     path: ${DEFAULT__ENTITY_CONTROLLER_DIRECTORY.pathOf($projectName,$type,$relationship_lc,$javaPath)}
     template: relationship_controller.vm
     buildable: false
+$Channel.put("${relationship}FunctionBody", $RELATIONSHIP)
+  - name: ${relationship}FunctionBody.java
+    path: ${DEFAULT__ENTITY_FUNCTION_DIRECTORY.pathOf($projectName,$type,$relationship_lc ,$javaPath)}
+    template: relationship_function_body.vm
+    buildable: false
+    key: ${relationship}FunctionBody

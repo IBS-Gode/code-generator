@@ -5,8 +5,10 @@ package $DEFAULT__ENTITY_MANAGER_DIRECTORY.value;
 import ${DEFAULT__ENTITY_VIEW_DIRECTORY.value}.${entity.name}View;
 
 import java.util.Optional;
+import  ${DEFAULT__ENTITY_FUNCTION_DIRECTORY.value}.${entity.name}Function;
+import ${DEFAULT__ENTITY_FUNCTION_DIRECTORY.value}.${entity.name}FunctionBody;
 
-public class ${entity.name}ManagerTest extends EntityViewManagerTest<${entity.name}Manager, ${entity.name}View, ${entity.getIdField().getObject().getFQN()}>{
+public class ${entity.name}ManagerTest extends EntityViewManagerTest<${entity.name}Manager, ${entity.name}View, ${entity.getIdField().getObject().getFQN()}, ${entity.name}FunctionBody>{
 
     @Override
     public Class<${entity.name}Manager> managerClass() {
@@ -22,4 +24,14 @@ public class ${entity.name}ManagerTest extends EntityViewManagerTest<${entity.na
     public Class<${entity.getIdField().getObject().getFQN()}> idClass() {
         return ${entity.getIdField().getObject().getFQN()}.class;
     }
+
+      @Override
+        public Class processFunctionClass() {
+            return ${entity.name}FunctionBody.class;
+        }
+
+        @Override
+        public ${entity.name}FunctionBody function() {
+            return new ${entity.name}Function();
+        }
 }

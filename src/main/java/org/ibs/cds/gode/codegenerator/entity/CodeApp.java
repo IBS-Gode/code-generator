@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
-public class CodeApp extends Specification implements Buildable, CodeGenerationComponent {
+public final class CodeApp extends Specification implements Buildable, CodeGenerationComponent {
     private Set<CodeEntity> entities;
     private Set<CodeEntityRelationship> relationships;
     private CodeAppFunctionNode appFunction;
@@ -31,7 +31,6 @@ public class CodeApp extends Specification implements Buildable, CodeGenerationC
         this.model = model;
         Map<Long, EntityStorePolicy> entityStorePolicyMap = resolveEntityStorePolicy(buildModel);
         this.entities = model.getEntities().stream().map(entity -> new CodeEntity(entity, buildModel, entityStorePolicyMap)).collect(Collectors.toSet());
-        this.appFunction = new CodeAppFunctionNode(model, buildModel);
         this.usage = model.getUsage();
         this.dependencies = model.getDependencies().stream().map(entity -> new CodeEntity(entity, buildModel, entityStorePolicyMap)).collect(Collectors.toSet());
         this.setName(model.getName());
@@ -39,18 +38,23 @@ public class CodeApp extends Specification implements Buildable, CodeGenerationC
         this.setVersion(model.getVersion());
         this.secure = buildModel.isSecure();
         this.systemQueue = buildModel.isSystemQueue();
-        List<RelationshipEntitySpec> relationships = model.getRelationships();
-        if(CollectionUtils.isEmpty(buildModel.getRelationshipStorePolicy()) && CollectionUtils.isNotEmpty(relationships)){
+        List<RelationshipEntitySpec> rawRelationships = model.getRelationships();
+        if(CollectionUtils.isEmpty(buildModel.getRelationshipStorePolicy()) && CollectionUtils.isNotEmpty(rawRelationships)){
             throw CodeGenerationFailure.SYSTEM_ERROR.provide("Relationship store policy undefined");
         }
         if(buildModel.getRelationshipStorePolicy() != null){
             Map<Long, RelationshipStorePolicy> map =buildModel.getRelationshipStorePolicy().stream().collect(Collectors.toMap(s->s.getRelationship().getArtifactId(), s->s));
-            this.relationships = CollectionUtils.isEmpty(relationships) ? Collections.emptySet() :
-                    relationships.stream().map(k-> new CodeEntityRelationship(k,map.get(k.getArtifactId()), buildModel)).collect(Collectors.toSet());
+            this.relationships = CollectionUtils.isEmpty(rawRelationships) ? Collections.emptySet() :
+                    rawRelationships.stream().map(k-> new CodeEntityRelationship(k,map.get(k.getArtifactId()), buildModel)).collect(Collectors.toSet());
         }else{
             this.relationships = Collections.emptySet();
         }
         this.features = new CodeAppFeatures(this);
+        Set<CodeEntityFunction> entityFunctions = new HashSet();
+        this.relationships.stream().map(CodeEntityFunction::fromRelationship).forEach(entityFunctions::add);
+        this.entities.stream().map(CodeEntityFunction::fromEntity).forEach(entityFunctions::add);
+        this.dependencies.stream().map(CodeEntityFunction::fromEntity).forEach(entityFunctions::add);
+        this.appFunction = new CodeAppFunctionNode(model, buildModel, entityFunctions);
     }
 
     public Map<Long,EntityStorePolicy> resolveEntityStorePolicy(BuildModel buildModel){
