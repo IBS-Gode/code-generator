@@ -1,5 +1,6 @@
 package org.ibs.cds.gode.codegenerator.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.apache.commons.collections4.CollectionUtils;
 import org.ibs.cds.gode.codegenerator.exception.CodeGenerationFailure;
@@ -10,6 +11,8 @@ import org.ibs.cds.gode.entity.type.EntityState;
 import org.ibs.cds.gode.entity.type.EntityStateStore;
 import org.ibs.cds.gode.entity.type.EntityStorePolicy;
 import org.ibs.cds.gode.util.Assert;
+import org.ibs.cds.gode.utils.StoreEssential;
+import org.ibs.cds.gode.utils.StoreUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -27,8 +30,14 @@ public class CodeEntityStorePolicy implements ResolvedFromModel<StatefulEntitySp
     }
 
     public boolean isDynamicQueryAvailable(){
-        return isAvailable() && (this.policy.getStoreName().getStoreType() == StoreType.JPA || this.policy.getStoreName().getStoreType() == StoreType.MONGODB);
+        return isAvailable() && (this.policy.getStoreName().isDynamicQuery());
     }
+
+    @JsonIgnore
+    public StoreEssential getStoreEssential(){
+        return hasDatabase() ? StoreUtils.essential(this.getPolicy().getStoreName().getStoreType()) : null;
+    }
+
     public boolean isAvailable() {
         return this.policy != null && !this.policy.isVolatileEntity();
     }

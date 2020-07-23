@@ -1,0 +1,23 @@
+#set($entityGivenName=${ENTITY.getName()})
+#set($idFieldType = $ENTITY.getIdField().getObject().getFQN())
+#set($storeEssentials = $StoreUtils.essential(${entityStorePolicy.policy.storeName.storeType}))
+#set($customStoreReq = ${storeEssentials.customRepoRequirements})
+package $DEFAULT__ENTITY_REPO_DIRECTORY.value;
+
+import ${DEFAULT__ENTITY_TYPE_DIRECTORY.value}.$entityGivenName;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+
+@Service
+public class ${entityGivenName}CustomStoreRepo extends $storeEssentials.customRepo.fqn()<${entityGivenName},$idFieldType> implements ${entityGivenName}StoreRepo {
+    @Autowired
+    public ${entityGivenName}CustomStoreRepo(
+        ${CodeGenUtil.toJavaArg($customStoreReq)}
+    ){
+        super(${CodeGenUtil.toJavaArgType($storeEssentials.customRepoRequirements)});
+    }
+
+}
+
+
