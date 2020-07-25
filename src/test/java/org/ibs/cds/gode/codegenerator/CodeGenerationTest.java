@@ -1,31 +1,27 @@
 package org.ibs.cds.gode.codegenerator;
 
-import java.io.IOException;
 import org.ibs.cds.gode.codegenerator.bind.ArtifactPackaging;
 import org.ibs.cds.gode.codegenerator.entity.AppCodeGenerator;
 import org.ibs.cds.gode.codegenerator.model.build.BuildModel;
 import org.ibs.cds.gode.codegenerator.spec.Level;
 import org.ibs.cds.gode.codegenerator.spec.ProgLanguage;
 import org.ibs.cds.gode.codegenerator.spec.StoreName;
+import org.ibs.cds.gode.entity.generic.AB;
 import org.ibs.cds.gode.entity.relationship.RelationshipType;
 import org.ibs.cds.gode.entity.type.*;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.List;
-import org.ibs.cds.gode.entity.generic.AB;
 
-public class Test {
+public class CodeGenerationTest {
 
-    public static void main(String[] args) throws IOException {
-//        CheckInManager checkInManager = new CheckInManager("http://localhost:3000","b23c7dd0a8e07d3e32f2adbf706ecef4472e3c2b", "ibs", "http://localhost:3000/api/v1");
-//        App app = app().getA();
-//        String path = "/Users/a-9023/Documents/work/code/code-generator/releases/5/app1-container";
-////        System.out.println(checkInManager.createRemoteRepo("test4", "s"));
-//        checkInManager.localRepo(app.getName().toLowerCase(), app.getDescription(), path);
-        testGenerate(app());
-//        checkInManager.checkIn(app.getName().toLowerCase(), path, new CheckInModel("manugraj", "grajmanu@gmail.com", "Test" ,"upgrade4"));
+    @Test
+    public void basicTest(){
+        Assert.assertTrue("Code generation failed",testGenerate(app()));
     }
 
-    private static void testGenerate(AB<App, RelationshipEntitySpec> app ) {
+    private static boolean testGenerate(AB<App, RelationshipEntitySpec> app ) {
 
         RelationshipStorePolicy policy = new RelationshipStorePolicy();
         policy.setStoreName(StoreName.MYSQL);
@@ -41,7 +37,7 @@ public class Test {
         model.setRelationshipStorePolicy(List.of(policy));
 
         AppCodeGenerator appCodeGenerator = new AppCodeGenerator(app.getA(), model);
-        appCodeGenerator.generate();
+        return appCodeGenerator.generate();
     }
 
     private static AB<App, RelationshipEntitySpec> app() {
