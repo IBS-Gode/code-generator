@@ -40,6 +40,18 @@ gode.datastore.cassandra.schema-action=NONE
 gode.datastore.cassandra.enabled=false
 #end
 
+
+#if(${APP.features.elasticsearchRequired})
+gode.datastore.elasticsearch.enabled=true
+gode.datastore.elasticsearch.hosts=http://localhost:9200
+gode.datastore.elasticsearch.user=
+gode.datastore.elasticsearch.password=
+gode.datastore.elasticsearch.cluster=
+gode.datastore.elasticsearch.doctype=gode
+#else
+gode.datastore.elasticsearch.enabled=false
+#end
+
 #if(${APP.features.queueSystemRequired})
 #QueueManagement
 gode.queue.kafka.enabled=true

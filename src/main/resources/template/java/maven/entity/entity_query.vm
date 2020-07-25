@@ -1,0 +1,11 @@
+package $DEFAULT__ENTITY_QUERY_DIRECTORY.value;
+
+import org.ibs.cds.gode.entity.query.model.QueryConfig;
+import ${DEFAULT__ENTITY_TYPE_DIRECTORY.value}.${ENTITY.name};
+
+public class ${ENTITY.name}Query extends QueryConfig<${ENTITY.name}>{
+
+    public ${ENTITY.name}Query(){
+        super(${ENTITY.name}.class);
+    }
+}

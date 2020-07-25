@@ -22,9 +22,11 @@ public enum PathPackage {
 
     DEFAULT__ENTITY_CONTROLLER_DIRECTORY(DEFAULT__ENTITY_DIRECTORY.getValue().concat(".controller"),true),
     DEFAULT__ENTITY_GQL_DIRECTORY(DEFAULT__ENTITY_DIRECTORY.getValue().concat(".gql"),true),
+    DEFAULT__ENTITY_FUNCTION_DIRECTORY(DEFAULT__ENTITY_DIRECTORY.getValue().concat(".function"), true),
+    DEFAULT__ENTITY_QUERY_DIRECTORY(DEFAULT__ENTITY_DIRECTORY.getValue().concat(".query"), true),
+
     DEFAULT__APP_DIRECTORY(DEFAULT_DIRECTORY.getValue().concat(".app"),true),
     DEFAULT__APP_FUNCTION_DIRECTORY(DEFAULT__APP_DIRECTORY.getValue().concat(".function"),true),
-    DEFAULT__ENTITY_FUNCTION_DIRECTORY(DEFAULT__ENTITY_DIRECTORY.getValue().concat(".function"), true),
     DEFAULT_GROUP_ID("org.ibs.cds.gode",false);
     ;
 

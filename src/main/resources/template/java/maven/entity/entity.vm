@@ -51,6 +51,10 @@ $Channel.put("${object.name}Key", $object)
     path: ${DEFAULT__ENTITY_REPO_DIRECTORY.pathOf($projectName,$type,$entityName,$javaPath)}
     template: entity_custom_repo.vm
     buildable: false
+  - name: ${entityGivenName}Query.java
+    path: ${DEFAULT__ENTITY_QUERY_DIRECTORY.pathOf($projectName,$type,$entityName,$javaPath)}
+    template: entity_query.vm
+    buildable: false
 #end
 #end
 #if($entityStateStored)

@@ -126,7 +126,22 @@ public enum LocalDeploymentRequirement {
     CASSANDRA_URI(requireCassandra(), "Cassandra URI", "cassandraContactPoint", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "spring.data.cassandra.contact-points")),
 
+    ELASTICSEARCH_URL(requireElasticsearch(), "Elastic-search URL", "elasticsearchUrl", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.elasticsearch.hosts")),
+
+    ELASTICSEARCH_USER(requireElasticsearch(), "Elastic-search username", "elasticsearchUser", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.elasticsearch.user")),
+
+    ELASTICSEARCH_PASSWORD(requireElasticsearch(), "Elastic-search password", "elasticsearchPass", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.elasticsearch.password")),
+
+    ELASTICSEARCH_CLUSTER(requireElasticsearch(), "Elastic-search cluster", "elasticsearchCluster", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.elasticsearch.cluster")),
+
+    ELASTICSEARCH_DOCUMENT(requireElasticsearch(), "Elastic-search document type", "elasticsearchDocument", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.elasticsearch.doctype")),
     ;
+
 
     private static Function<LocalDeploymentRequirement, Function<CodeApp, String>> migrationSearch() {
         return  requirement -> codeApp -> "hibernate:spring:org.ibs.cds.gode.entity.type?dialect=".concat(requirement.getValue());
@@ -198,6 +213,10 @@ public enum LocalDeploymentRequirement {
     @NotNull
     private static Predicate<CodeApp> requireCassandra() {
         return c -> c.getFeatures().isCassandraRequired();
+    }
+    @NotNull
+    private static Predicate<CodeApp> requireElasticsearch() {
+        return c -> c.getFeatures().isElasticsearchRequired();
     }
 
     @Override

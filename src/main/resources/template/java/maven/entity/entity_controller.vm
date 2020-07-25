@@ -26,9 +26,17 @@ import org.ibs.cds.gode.web.Request;
 import org.ibs.cds.gode.web.Response;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.ibs.cds.gode.entity.operation.Executor;
-import org.ibs.cds.gode.entity.operation.Logic;
-import org.ibs.cds.gode.exception.KnownException;
+import io.swagger.annotations.ApiOperation;
+#end
+#if($ENTITY.storePolicy.policy.storeName == "ELASTICSEARCH")
+import ${DEFAULT__ENTITY_QUERY_DIRECTORY.value}.${entityGivenName}Query;
+
+import org.springframework.web.bind.annotation.RequestBody;
+import org.ibs.cds.gode.pagination.PagedData;
+import org.ibs.cds.gode.util.APIArgument;
+import org.ibs.cds.gode.web.Request;
+import org.ibs.cds.gode.web.Response;
+import org.springframework.web.bind.annotation.PostMapping;
 import io.swagger.annotations.ApiOperation;
 #end
 
@@ -36,18 +44,26 @@ import io.swagger.annotations.ApiOperation;
 @Api(tags = {"${entityGivenName}"})
 @RequestMapping(value= "/gode/entity/${entityName}")
 public class ${entityGivenName}StateController extends EntityStateEndPoint<${entityViewGivenName},${entityGivenName},${entityGivenName}Manager,$idFieldType> {
+     private static final String FIND_ALL_WHERE = "/findAll/where";
 
     @Autowired
     public ${entityGivenName}StateController(${entityGivenName}Manager manager) {
     super(manager);
     }
 
+    #if($ENTITY.storePolicy.policy.storeName == "ELASTICSEARCH")
+        @PostMapping(path= FIND_ALL_WHERE)
+        @ApiOperation("Find all entity instances dynamically")
+        public Response<PagedData<${entityViewGivenName}>> findAllByPredicate(@RequestBody ${entityGivenName}Query query) {
+            return super.findAllByPredicate(query, FIND_ALL_WHERE);
+        }
+    #end
+
     #if($ENTITY.storePolicy.isDynamicQueryAvailable())
-        private static final String FIND_ALL_WHERE = "/findAll/where";
         @GetMapping(path= FIND_ALL_WHERE)
         @ApiOperation("Find all entity instances dynamically")
-        public Response<PagedData<${entityViewGivenName}>> findAllByPredicate(@QuerydslPredicate Predicate predicate, @ModelAttribute APIArgument argument) {
-            return Executor.run(Logic.findAllByPredicate0(), PageContext.fromAPI(argument), predicate, manager, KnownException.QUERY_FAILED, FIND_ALL_WHERE);
+        public Response<PagedData<${entityViewGivenName}>> findAllByPredicate(@QuerydslPredicate(root = ${entityGivenName}.class) Predicate predicate, @ModelAttribute APIArgument argument) {
+            return super.findAllByPredicate(predicate, argument, FIND_ALL_WHERE);
         }
     #end
 }
