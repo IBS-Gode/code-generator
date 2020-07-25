@@ -11,6 +11,7 @@ import org.ibs.cds.gode.entity.type.Specification;
 import org.ibs.cds.gode.codegenerator.spec.YamlReadWriteUtil;
 import org.ibs.cds.gode.status.BinaryStatus;
 import org.ibs.cds.gode.system.GodeConstant;
+import org.ibs.cds.gode.util.CodeGenUtil;
 import org.ibs.cds.gode.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.io.Resource;
@@ -37,6 +38,7 @@ public class VelocityGeneratorEngine<T extends Specification & CodeGenerationCom
         context.put("StringUtils", StringUtils.class);
         context.put("GodeConstant", GodeConstant.class);
         context.put("Channel",VelocityChannel.class);
+        context.put("CodeGenUtil", CodeGenUtil.class);
         this.buildable = new HashSet();
         this.repo = repo;
     }

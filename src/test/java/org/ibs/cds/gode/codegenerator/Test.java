@@ -130,6 +130,14 @@ public class Test {
         test3.setCached(true);
         state4.setEntityStateStore(test3);
 
+        EntityState state5 = new EntityState();
+        state5.setOpsLevel(new OperationLevel(Level.HIGH, Level.MEDIUM, Level.LOW, false, false));
+        EntityStateStore test5 = new EntityStateStore();
+        test5.setStoreName(StoreName.ELASTICSEARCH);
+        test5.setAsyncStoreSync(true);
+        test5.setCached(true);
+        state5.setEntityStateStore(test5);
+
         StatefulEntitySpec statefulEntitySpec4 = new StatefulEntitySpec();
         statefulEntitySpec4.setName("Entity4");
         statefulEntitySpec4.setDescription("Entity 4 descr");
@@ -137,6 +145,14 @@ public class Test {
         statefulEntitySpec4.setFields(List.of(field));
         statefulEntitySpec4.setIdField(idField);
         statefulEntitySpec4.setState(state4);
+
+        StatefulEntitySpec statefulEntitySpec5 = new StatefulEntitySpec();
+        statefulEntitySpec5.setName("Entity5");
+        statefulEntitySpec5.setDescription("Entity 5 descr");
+        statefulEntitySpec5.setVersion(7L);
+        statefulEntitySpec5.setFields(List.of(field));
+        statefulEntitySpec5.setIdField(idField);
+        statefulEntitySpec5.setState(state5);
 
         RelationshipEntitySpec relationshipEntitySpec = new RelationshipEntitySpec();
         relationshipEntitySpec.setName("ParentCustomerRelationship");
@@ -172,7 +188,7 @@ public class Test {
         app.setName("App1");
         app.setDescription("App1 description");
         app.setVersion(10L);
-        app.setEntities(List.of(statefulEntitySpec, statefulEntitySpec2, statefulEntitySpec3, statefulEntitySpec4));
+        app.setEntities(List.of(statefulEntitySpec, statefulEntitySpec2, statefulEntitySpec3, statefulEntitySpec4, statefulEntitySpec5));
         app.setFunctions(List.of(function, function2));
         app.setRelationships(List.of(relationshipEntitySpec));
         return AB.of(app, relationshipEntitySpec);

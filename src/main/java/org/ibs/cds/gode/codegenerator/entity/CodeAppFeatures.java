@@ -11,6 +11,7 @@ public class CodeAppFeatures {
     private final boolean jpaStoreRequired;
     private final boolean mongoRequired;
     private final boolean cassandraRequired;
+    private final boolean elasticsearchRequired;
     private final boolean statefulEntityIncluded;
     private final boolean statelessEntityIncluded;
     private final boolean relationshipEntityIncluded;
@@ -32,6 +33,8 @@ public class CodeAppFeatures {
         this.secure = app.isSecure();
         this.cassandraRequired = app.getEntities().stream().anyMatch(k -> k.getStorePolicy().isAvailable() &&
                 k.getStorePolicy().getPolicy().getStoreName().getStoreType() == StoreType.CASSANDRA);
+        this.elasticsearchRequired = app.getEntities().stream().anyMatch(k -> k.getStorePolicy().isAvailable() &&
+                k.getStorePolicy().getPolicy().getStoreName().getStoreType() == StoreType.ELASTICSEARCH);
         this.autosequenceFields = app.getEntities().stream().flatMap(k->k.getFields().stream()).anyMatch(CodeEntityField::isAutosequence);
     }
 

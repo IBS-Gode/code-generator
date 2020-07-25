@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.ibs.cds.gode.codegenerator.spec.StoreName;
+import org.ibs.cds.gode.utils.StoreEssential;
+import org.ibs.cds.gode.utils.StoreUtils;
 
 @Data
 @AllArgsConstructor

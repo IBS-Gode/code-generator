@@ -16,6 +16,22 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+#if($ENTITY.storePolicy.isDynamicQueryAvailable())
+import com.querydsl.core.types.Predicate;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.ibs.cds.gode.pagination.PageContext;
+import org.ibs.cds.gode.pagination.PagedData;
+import org.ibs.cds.gode.util.APIArgument;
+import org.ibs.cds.gode.web.Request;
+import org.ibs.cds.gode.web.Response;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.ibs.cds.gode.entity.operation.Executor;
+import org.ibs.cds.gode.entity.operation.Logic;
+import org.ibs.cds.gode.exception.KnownException;
+import io.swagger.annotations.ApiOperation;
+#end
+
 @Endpoint
 @Api(tags = {"${entityGivenName}"})
 @RequestMapping(value= "/gode/entity/${entityName}")
@@ -25,4 +41,13 @@ public class ${entityGivenName}StateController extends EntityStateEndPoint<${ent
     public ${entityGivenName}StateController(${entityGivenName}Manager manager) {
     super(manager);
     }
+
+    #if($ENTITY.storePolicy.isDynamicQueryAvailable())
+        private static final String FIND_ALL_WHERE = "/findAll/where";
+        @GetMapping(path= FIND_ALL_WHERE)
+        @ApiOperation("Find all entity instances dynamically")
+        public Response<PagedData<${entityViewGivenName}>> findAllByPredicate(@QuerydslPredicate Predicate predicate, @ModelAttribute APIArgument argument) {
+            return Executor.run(Logic.findAllByPredicate0(), PageContext.fromAPI(argument), predicate, manager, KnownException.QUERY_FAILED, FIND_ALL_WHERE);
+        }
+    #end
 }

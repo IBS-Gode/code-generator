@@ -29,6 +29,9 @@ import org.ibs.cds.gode.entity.cache.CacheEntity;
 
 #if($storedEntity)
 @$storeEssentials.entityAnnotation.name
+#if($storeEssentials.isElasticsearch())
+(indexName = "${entityName}")
+#end
 #end
 #if(${storeEssentials.isMongo()})
 @org.mongodb.morphia.annotations.Entity

@@ -46,6 +46,12 @@ $Channel.put("${object.name}Key", $object)
     path: ${DEFAULT__ENTITY_REPO_DIRECTORY.pathOf($projectName, $type, $entityName,$javaPath)}
     template: entity_repository.vm
     buildable: false
+#if(${ENTITY.storePolicy.getStoreEssential().hasCustomRepo()})
+  - name: ${entityGivenName}CustomStoreRepo.java
+    path: ${DEFAULT__ENTITY_REPO_DIRECTORY.pathOf($projectName,$type,$entityName,$javaPath)}
+    template: entity_custom_repo.vm
+    buildable: false
+#end
 #end
 #if($entityStateStored)
   - name: ${entityGivenName}.java
@@ -94,4 +100,3 @@ $Channel.put("${entityGivenName}FunctionBody", $ENTITY)
     template: entity_cache_repository.vm
     buildable: false
 #end
-
