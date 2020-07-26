@@ -38,6 +38,7 @@ $Channel.put("${object.name}Key", $object)
     key: ${object.name}Key
 #end
 #if($hasDB)
+#set($storeType = ${ENTITY.storePolicy.policy.storeName.storeType})
   - name: ${entityGivenName}StoreRepo.java
     path: ${DEFAULT__ENTITY_REPO_DIRECTORY.pathOf($projectName, $type, $entityName,$javaPath)}
     template: entity_repo.vm
@@ -51,6 +52,8 @@ $Channel.put("${object.name}Key", $object)
     path: ${DEFAULT__ENTITY_REPO_DIRECTORY.pathOf($projectName,$type,$entityName,$javaPath)}
     template: entity_custom_repo.vm
     buildable: false
+#end
+#if($storeType == "ELASTICSEARCH" || $storeType == "JPA")
   - name: ${entityGivenName}Query.java
     path: ${DEFAULT__ENTITY_QUERY_DIRECTORY.pathOf($projectName,$type,$entityName,$javaPath)}
     template: entity_query.vm

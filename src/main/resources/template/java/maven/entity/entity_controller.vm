@@ -5,7 +5,7 @@
 #set($idFieldType = $ENTITY.getIdField().getObject().getFQN())
 #set($entityPackage=${DEFAULT__ENTITY_TYPE_DIRECTORY.value})
 #set($viewPackage=${DEFAULT__ENTITY_VIEW_DIRECTORY.value})
-
+#set($storeType = ${ENTITY.storePolicy.policy.storeName.storeType})
 package ${DEFAULT__ENTITY_CONTROLLER_DIRECTORY.value};
 
 import com.querydsl.core.types.Predicate;
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import io.swagger.annotations.ApiOperation;
 #end
-#if($ENTITY.storePolicy.policy.storeName == "ELASTICSEARCH")
+#if($storeType == "ELASTICSEARCH" || $storeType == "JPA")
 import ${DEFAULT__ENTITY_QUERY_DIRECTORY.value}.${entityGivenName}Query;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,7 +51,7 @@ public class ${entityGivenName}StateController extends EntityStateEndPoint<${ent
     super(manager);
     }
 
-    #if($ENTITY.storePolicy.policy.storeName == "ELASTICSEARCH")
+    #if($storeType == "ELASTICSEARCH" || $storeType == "JPA")
         @PostMapping(path= FIND_ALL_WHERE)
         @ApiOperation("Find all entity instances dynamically")
         public Response<PagedData<${entityViewGivenName}>> findAllByPredicate(@RequestBody ${entityGivenName}Query query) {
