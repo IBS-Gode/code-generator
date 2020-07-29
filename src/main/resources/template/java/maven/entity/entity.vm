@@ -53,7 +53,7 @@ $Channel.put("${object.name}Key", $object)
     template: entity_custom_repo.vm
     buildable: false
 #end
-#if($storeType == "ELASTICSEARCH" || $storeType == "JPA")
+#if($storeType == "ELASTICSEARCH" || $storeType == "JPA" || $storeType == "MONGODB")
   - name: ${entityGivenName}Query.java
     path: ${DEFAULT__ENTITY_QUERY_DIRECTORY.pathOf($projectName,$type,$entityName,$javaPath)}
     template: entity_query.vm
