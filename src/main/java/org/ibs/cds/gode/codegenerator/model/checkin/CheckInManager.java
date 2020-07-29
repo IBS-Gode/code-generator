@@ -4,6 +4,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.ibs.cds.gode.codegenerator.entity.CodeApp;
 import org.ibs.cds.gode.codegenerator.entity.CodeAppUtil;
 import org.ibs.cds.gode.deployer.git.LocalGit;
+import org.ibs.cds.gode.deployer.git.NGit;
 import org.ibs.cds.gode.deployer.git.RemoteGit;
 import org.ibs.cds.gode.deployer.git.RemoteGitUrl;
 import org.ibs.cds.gode.entity.type.App;
@@ -16,6 +17,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.Optional;
 
@@ -46,6 +48,7 @@ public class CheckInManager {
                         "org", remoteGitOrg,
                         "auth", remoteRepoAuth,
                         "repo", repoName
+
                 ),
                 RemoteGit.ResponseType.CLONE_URL).getKey().get(RemoteGit.ResponseType.CLONE_URL);
         return Optional.ofNullable(url);
@@ -56,6 +59,7 @@ public class CheckInManager {
                 "org", remoteGitOrg,
                 "auth", remoteRepoAuth,
                 "repo", repoName,
+                "init", "true",
                 "description", description
         ),
                 RemoteGit.ResponseType.CLONE_URL);
@@ -76,6 +80,7 @@ public class CheckInManager {
         Assert.notNull("Git Url cannot be empty", cloneUrl);
         LocalGit git = LocalGit.at(repoName, new File(path), new RemoteGitUrl(cloneUrl, remoteRepoAuth));
         git.addRemote(cloneUrl);
+        git.checkout("master");
         git.pullMaster();
         return cloneUrl;
     }
