@@ -25,9 +25,16 @@ public enum DockerDeploymentRequirement implements DeploymentRequirements {
             of(CodeGenerationComponent.ComponentName.APP, "spring.boot.admin.client.url", adminUrl()),
             of(CodeGenerationComponent.ComponentName.DOCKER_COMPOSE, "adminserver.port", dockerExternalAndInternalPort(),adminDockerPortProperty())),
 
+    JPA_URL(requireJPA(), "JPA port","jpaPort", FieldType.TEXT,
+            of(CodeGenerationComponent.ComponentName.DOCKER_COMPOSE, "jpa.url",dockerJpaExternalAndInternalPort(), dockerJpaExternalAndInternalPortProperty()),
+            of(CodeGenerationComponent.ComponentName.APP_MIGRATION, "url",linkBaseUrl()),
+            of(CodeGenerationComponent.ComponentName.APP_MIGRATION, "password",getValueString("dbpass")),
+            of(CodeGenerationComponent.ComponentName.APP_MIGRATION, "username",getValueString("dbuser")),
+            of(CodeGenerationComponent.ComponentName.APP_MIGRATION, "driver",getValueString("com.mysql.cj.jdbc.Driver"))),
+
     APP_PORT(always(), "Application port","appPort", FieldType.NUMBER,
             of(CodeGenerationComponent.ComponentName.APP, "appserver.port"),
-            of(CodeGenerationComponent.ComponentName.DOCKER_COMPOSE, "server.port", dockerExternalAndInternalPort(), appDockerPortProperty())),
+            of(CodeGenerationComponent.ComponentName.DOCKER_COMPOSE, "server.port", dockerAppExternalAndInternalPort(), appDockerPortProperty())),
 
     MEDIA_SERVER_LOC(always(), "Media server directory","mediaServer", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.media.store.location")),
@@ -120,6 +127,25 @@ public enum DockerDeploymentRequirement implements DeploymentRequirements {
     @NotNull
     private static Function<org.ibs.cds.gode.codegenerator.model.deploy.DeploymentRequirements, Function<CodeApp, String>> dockerExternalAndInternalPort() {
         return req -> codeApp -> req.getValue().concat(":").concat(req.getValue());
+    }
+    @NotNull
+    private static Function<org.ibs.cds.gode.codegenerator.model.deploy.DeploymentRequirements, Function<CodeApp, String>> linkBaseUrl() {
+        return req -> codeApp -> "jdbc:mysql://jpa-mySql-database_".concat(codeApp.getName().toLowerCase()).concat("/").concat(codeApp.getName().toLowerCase()).concat("_db?useSSL=false&allowPublicKeyRetrieval=true");
+    }
+
+    @NotNull
+    private static Function<org.ibs.cds.gode.codegenerator.model.deploy.DeploymentRequirements, Function<CodeApp, String>> getValueString(String value) {
+        return req -> codeApp -> value;
+    }
+
+    @NotNull
+    private static Function<org.ibs.cds.gode.codegenerator.model.deploy.DeploymentRequirements, Function<CodeApp, String>> dockerJpaExternalAndInternalPort() {
+        return req -> codeApp -> req.getValue().concat(":").concat(req.getValue());
+    }
+
+    @NotNull
+    private static Function<org.ibs.cds.gode.codegenerator.model.deploy.DeploymentRequirements, Function<CodeApp, String>> dockerJpaExternalAndInternalPortProperty() {
+        return req -> codeApp ->  "services(jpa-mySql-database_".concat(codeApp.getName().toLowerCase()).concat(")").concat(".ports[0]");
     }
 
     @NotNull

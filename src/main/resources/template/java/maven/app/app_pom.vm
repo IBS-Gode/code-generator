@@ -161,7 +161,9 @@
                 <groupId>com.dkanejs.maven.plugins</groupId>
                 <artifactId>docker-compose-maven-plugin</artifactId>
                 <version>3.0.1</version>
-
+                <configuration>
+                    <composeFile>${project.basedir}/docker-compose.yml</composeFile>
+                </configuration>
             </plugin>
         </plugins>
     </build>
