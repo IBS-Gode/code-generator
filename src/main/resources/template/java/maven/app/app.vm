@@ -46,3 +46,7 @@ configuration:
     template: liquibase_properties.vm
     buildable: false
 #end
+  - name: docker-compose.yml
+    path: ${PathPackage.path($projectName,$type, $appName)}
+    template: entity_docker-compose.vm
+    buildable: false

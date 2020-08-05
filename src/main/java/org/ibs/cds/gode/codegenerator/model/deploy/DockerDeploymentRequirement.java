@@ -19,44 +19,15 @@ import java.util.stream.Stream;
 
 import static org.ibs.cds.gode.codegenerator.model.deploy.Action.of;
 
-public enum LocalDeploymentRequirement implements DeploymentRequirements {
+public enum DockerDeploymentRequirement implements DeploymentRequirements {
     ADMIN_PORT(always(), "Monitor app port","adminPort", FieldType.NUMBER,
             of(CodeGenerationComponent.ComponentName.ADMIN, "server.port"),
-            of(CodeGenerationComponent.ComponentName.APP, "spring.boot.admin.client.url", adminUrl())),
-
-    JPA_DRIVER(requireJPA(), "JPA Driver","jpaDriver", FieldType.TEXT,
-            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.jpa.driver"),
-            of(CodeGenerationComponent.ComponentName.APP_MIGRATION, "driver")
-    ),
-
-    JPA_DIALECT(requireJPA(), "JPA Dialect","jpaDialect", FieldType.TEXT,
-            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.jpa.dialect"),
-            of(CodeGenerationComponent.ComponentName.APP_MIGRATION, "referenceUrl", migrationSearch())
-    ),
-
-    JPA_URL(requireJPA(), "JPA Database url","jpaUrl", FieldType.TEXT,
-            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.jpa.datasource.url"),
-            of(CodeGenerationComponent.ComponentName.APP_MIGRATION, "url")
-    ),
-
-    JPA_USERNAME(requireJPA(), "JPA Database username", "jpaUsername", FieldType.TEXT,
-            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.jpa.datasource.username"),
-            of(CodeGenerationComponent.ComponentName.APP_MIGRATION, "username")
-    ),
-
-    JPA_PASSWORD(requireJPA(), "JPA Database password","jpaPassword", FieldType.TEXT,
-            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.jpa.datasource.password"),
-            of(CodeGenerationComponent.ComponentName.APP_MIGRATION, "password")
-    ),
-
-    MONGODB_URI(requireMongoDB(), "MongoDB URI","mongoUri", FieldType.TEXT,
-            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.mongodb.uri")),
-
-    MONGODB_DATABASE(requireMongoDB(), "MongoDB useername","mongoDatabaseName", FieldType.TEXT,
-            of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.mongodb.database.name")),
+            of(CodeGenerationComponent.ComponentName.APP, "spring.boot.admin.client.url", adminUrl()),
+            of(CodeGenerationComponent.ComponentName.DOCKER_COMPOSE, "adminserver.port", dockerExternalAndInternalPort(),adminDockerPortProperty())),
 
     APP_PORT(always(), "Application port","appPort", FieldType.NUMBER,
-            of(CodeGenerationComponent.ComponentName.APP, "server.port")),
+            of(CodeGenerationComponent.ComponentName.APP, "appserver.port"),
+            of(CodeGenerationComponent.ComponentName.DOCKER_COMPOSE, "server.port", dockerExternalAndInternalPort(), appDockerPortProperty())),
 
     MEDIA_SERVER_LOC(always(), "Media server directory","mediaServer", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.media.store.location")),
@@ -114,21 +85,11 @@ public enum LocalDeploymentRequirement implements DeploymentRequirements {
 
     TEAMS_NOTIFICATION_WEBHOOKS_URL(c -> true, "Teams Notification Webhooks Url","teamsWebhooksUrl", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.ADMIN, "spring.boot.admin.notify.slack.webhook-url")),
-    CASSANDRA_PORT(requireCassandra(), "Cassandra port","cassandraPort", FieldType.TEXT,
-            of(CodeGenerationComponent.ComponentName.APP, "spring.data.cassandra.port")),
 
-    CASSANDRA_USERNAME(requireCassandra(), "Cassandra username","cassandraUsername", FieldType.TEXT,
-            of(CodeGenerationComponent.ComponentName.APP, "spring.data.cassandra.username")),
-
-    CASSANDRA_PASSWORD(requireCassandra(), "Cassandra username","cassandraPassword", FieldType.TEXT,
-            of(CodeGenerationComponent.ComponentName.APP, "spring.data.cassandra.password")),
-
-    CASSANDRA_URI(requireCassandra(), "Cassandra URI", "cassandraContactPoint", FieldType.TEXT,
-            of(CodeGenerationComponent.ComponentName.APP, "spring.data.cassandra.contact-points")),
 
     ;
 
-    private static Function<DeploymentRequirements, Function<CodeApp, String>> migrationSearch() {
+    private static Function<DockerDeploymentRequirement, Function<CodeApp, String>> migrationSearch() {
         return  requirement -> codeApp -> "hibernate:spring:org.ibs.cds.gode.entity.type?dialect=".concat(requirement.getValue());
     }
 
@@ -140,9 +101,10 @@ public enum LocalDeploymentRequirement implements DeploymentRequirements {
     private @Getter
     @Setter
     String value;
-    private @Getter List<Action> actions;
+    private @Getter
+    List<Action> actions;
     private @Getter String label;
-    LocalDeploymentRequirement(Predicate<CodeApp> entryCriteria, String label, String propertyName, FieldType type, Action... actions) {
+    DockerDeploymentRequirement(Predicate<CodeApp> entryCriteria, String label, String propertyName, FieldType type, Action... actions) {
         this.entryCriteria = entryCriteria;
         this.propertyName = propertyName;
         this.type = type;
@@ -152,7 +114,26 @@ public enum LocalDeploymentRequirement implements DeploymentRequirements {
 
     @NotNull
     private static Function<org.ibs.cds.gode.codegenerator.model.deploy.DeploymentRequirements, Function<CodeApp, String>> adminUrl() {
-        return req -> codeApp -> "http://localhost:".concat(req.getValue()).concat("/").concat(CodeAppUtil.adminAppName(codeApp).toLowerCase());
+        return req -> codeApp -> "http://".concat(CodeAppUtil.adminAppName(codeApp).toLowerCase()).concat("-service:").concat(req.getValue()).concat("/").concat(CodeAppUtil.adminAppName(codeApp).toLowerCase());
+    }
+
+    @NotNull
+    private static Function<org.ibs.cds.gode.codegenerator.model.deploy.DeploymentRequirements, Function<CodeApp, String>> dockerExternalAndInternalPort() {
+        return req -> codeApp -> req.getValue().concat(":").concat(req.getValue());
+    }
+
+    @NotNull
+    private static Function<org.ibs.cds.gode.codegenerator.model.deploy.DeploymentRequirements, Function<CodeApp, String>> dockerAppExternalAndInternalPort() {
+        return req -> codeApp -> req.getValue().concat(":").concat(req.getValue());
+    }
+
+    @NotNull
+    private static Function<org.ibs.cds.gode.codegenerator.model.deploy.DeploymentRequirements, Function<CodeApp, String>> adminDockerPortProperty() {
+        return req -> codeApp ->  "services(".concat(CodeAppUtil.adminAppName(codeApp).toLowerCase()).concat("-service)").concat(".ports[0]");
+    }
+    @NotNull
+    private static Function<org.ibs.cds.gode.codegenerator.model.deploy.DeploymentRequirements, Function<CodeApp, String>> appDockerPortProperty() {
+        return req -> codeApp ->  "services(".concat(codeApp.getName().toLowerCase()).concat("-service).ports[0]");
     }
 
     @NotNull
@@ -176,8 +157,8 @@ public enum LocalDeploymentRequirement implements DeploymentRequirements {
     }
 
     @JsonIgnore
-    public static LocalDeploymentRequirement from(String propertyName, String value, CodeApp app) {
-        return Stream.of(LocalDeploymentRequirement.values())
+    public static DockerDeploymentRequirement from(String propertyName, String value, CodeApp app) {
+        return Stream.of(DockerDeploymentRequirement.values())
                 .filter(k -> k.propertyName.equals(propertyName))
                 .findAny()
                 .map(k -> {
@@ -190,7 +171,7 @@ public enum LocalDeploymentRequirement implements DeploymentRequirements {
     @JsonIgnore
     public static Map<String, String> values(CodeApp app) {
         return Arrays
-                .stream(LocalDeploymentRequirement.values())
+                .stream(DockerDeploymentRequirement.values())
                 .filter(k -> k.entryCriteria.test(app))
                 .collect(Collectors.toMap(s -> s.propertyName, s -> s.getLabel()));
     }
@@ -198,10 +179,6 @@ public enum LocalDeploymentRequirement implements DeploymentRequirements {
     @NotNull
     private static Predicate<CodeApp> requireCassandra() {
         return c -> c.getFeatures().isCassandraRequired();
-    }
-    @NotNull
-    private static Predicate<CodeApp> requireElasticsearch() {
-        return c -> c.getFeatures().isElasticsearchRequired();
     }
 
     @Override
