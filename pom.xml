@@ -24,6 +24,7 @@
         <velocity.version>1.7</velocity.version>
         <velocity.tools.version>2.0</velocity.tools.version>
         <h2.version>1.4.197</h2.version>
+        <mapdb.version>3.0.8</mapdb.version>
     </properties>
 
     <build>
@@ -118,9 +119,9 @@
             <version>${gode.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.ibs.cds.gode</groupId>
-            <artifactId>gode-cache</artifactId>
-            <version>${gode.version}</version>
+            <groupId>org.mapdb</groupId>
+            <artifactId>mapdb</artifactId>
+            <version>${mapdb.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
