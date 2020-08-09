@@ -17,6 +17,13 @@
     <version>$projectVersion</version>
 
     <dependencies>
+        #if(${app.features.datapipelineRequired})
+          <dependency>
+                <groupId>$DEFAULT_GROUP_ID.value</groupId>
+                <artifactId>gode-streams</artifactId>
+                <version>${gode.version}</version>
+            </dependency>
+        #end
         #foreach($entity in $app.entities)
             <dependency>
                 <groupId>$DEFAULT_GROUP_ID.value</groupId>

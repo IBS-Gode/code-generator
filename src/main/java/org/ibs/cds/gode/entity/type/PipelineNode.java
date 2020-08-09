@@ -17,7 +17,7 @@ public class PipelineNode extends ManagedEntity
     private String name;
     private String mapTo;
     @OneToOne(cascade = CascadeType.ALL)
-    private Sink sink;
+    private PipelineSink sink;
     @OneToOne(cascade = CascadeType.ALL)
     private PipelineNode next;
     private final static long serialVersionUID = 520730522255386580L;

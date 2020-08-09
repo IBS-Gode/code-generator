@@ -23,6 +23,7 @@ public final class CodeApp extends Specification implements Buildable, CodeGener
     private BuildModel buildModel;
     private Set<CodeEntity> dependencies;
     private CodeAppFeatures features;
+    private CodeDataPipelines dataPipelines;
     private boolean secure;
     private boolean systemQueue;
 
@@ -49,12 +50,13 @@ public final class CodeApp extends Specification implements Buildable, CodeGener
         }else{
             this.relationships = Collections.emptySet();
         }
-        this.features = new CodeAppFeatures(this);
         Set<CodeEntityFunction> entityFunctions = new HashSet();
         this.relationships.stream().map(CodeEntityFunction::fromRelationship).forEach(entityFunctions::add);
         this.entities.stream().map(CodeEntityFunction::fromEntity).forEach(entityFunctions::add);
         this.dependencies.stream().map(CodeEntityFunction::fromEntity).forEach(entityFunctions::add);
         this.appFunction = new CodeAppFunctionNode(model, buildModel, entityFunctions);
+        this.dataPipelines = new CodeDataPipelines(model.getDatapipeline());
+        this.features = new CodeAppFeatures(this);
     }
 
     public Map<Long,EntityStorePolicy> resolveEntityStorePolicy(BuildModel buildModel){

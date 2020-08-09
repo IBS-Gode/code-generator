@@ -3,6 +3,7 @@
 #set($appFunctionName=${APP_FUNCTION.getName().toLowerCase()})
 #set($type = ${APP_FUNCTION.nature})
 #set($basePath = ${DEFAULT__APP_FUNCTION_DIRECTORY.pathOf($projectName,$type,$appFunctionName,$javaPath)})
+#set($resourcePath = ${CodeAppUtil.javaResourcePath()})
 configuration:
   - name: pom.xml
     path: ${PathPackage.path($projectName,$type, $appFunctionName)}
@@ -39,4 +40,30 @@ $Channel.put("${entityFunction.entity.name}FunctionAppKey", $entityFunction)
     template: entity_function_body.vm
     buildable: false
     key: ${entityFunction.entity.name}FunctionAppKey
+#end
+#if(${app.features.datapipelineRequired})
+#foreach($pipeline in $app.dataPipelines.pipelines)
+$Channel.put("${pipeline.name}sync", $pipeline.stateSynchroniser)
+  - name: ${pipeline.stateSynchroniser.name}.java
+    path: ${DEFAULT__APP_DATAPIPELINE_SYNC_DIRECTORY.pathOf($projectName, $type,$appFunctionName,$javaPath)}
+    template: data_pipeline_synchroniser.vm
+    buildable: false
+    key: ${pipeline.name}sync
+#if(${pipeline.isSuppliedFromEntity()})
+$Channel.put("${pipeline.name}pub", ${pipeline.supplierEntity})
+  - name: ${pipeline.supplierEntity}Publisher.java
+    path: ${DEFAULT__APP_DATAPIPELINE_PUBLISHER_DIRECTORY.pathOf($projectName, $type,$appFunctionName,$javaPath)}
+    template: data_pipeline_publisher.vm
+    buildable: false
+    key: ${pipeline.name}pub
+#end
+#foreach($processor in $pipeline.processors)
+$Channel.put(${processor.name}, $processor)
+  - name: ${processor.name}.java
+    path: ${DEFAULT__APP_DATAPIPELINE_DIRECTORY.pathOf($projectName, $type,$appFunctionName,$javaPath)}
+    template: data_pipeline_processor.vm
+    buildable: false
+    key: ${processor.name}
+#end
+#end
 #end

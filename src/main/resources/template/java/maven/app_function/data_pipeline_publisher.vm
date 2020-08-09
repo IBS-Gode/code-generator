@@ -1,0 +1,24 @@
+#set($publisher = ${Channel.get($key)})
+package org.ibs.cds.gode.stream.publisher;
+
+import org.ibs.cds.gode.entity.view.${publisher}View;
+import org.ibs.cds.gode.queue.manager.QueueRepository;
+import org.ibs.cds.gode.stream.repo.DataPipeline;
+
+import java.util.List;
+import java.util.function.Supplier;
+import org.springframework.stereotype.Component;
+
+@Component
+public class ${publisher}Publisher extends SuppliedStatePublisher<${publisher}View>{
+
+    public ${publisher}Publisher(QueueRepository queueRepository, DataPipeline dataPipeline) {
+        super(queueRepository, dataPipeline);
+    }
+
+    @Override
+    public Supplier<List<${publisher}View>> supplier() {
+        return null;
+    }
+
+}

@@ -1,0 +1,16 @@
+#set($sync = ${Channel.get($key)})
+package org.ibs.cds.gode.stream.synchroniser;
+
+import ${DEFAULT__ENTITY_MANAGER_DIRECTORY.value}.${sync.entity}Manager;
+import ${DEFAULT__ENTITY_VIEW_DIRECTORY.value}.${sync.entity}View;
+import org.ibs.cds.gode.queue.manager.QueueRepository;
+import org.ibs.cds.gode.stream.repo.DataPipeline;
+import org.springframework.stereotype.Component;
+
+@Component
+public class ${sync.name} extends QueueStateSynchroniser<${sync.entity}View> {
+
+    public ${sync.name}(${sync.entity}Manager manager, QueueRepository queueRepository, DataPipeline dataPipeline) {
+        super("${sync.entity.toLowerCase()}", manager, queueRepository, dataPipeline);
+    }
+}

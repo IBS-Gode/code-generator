@@ -11,14 +11,14 @@ import java.util.List;
 
 @Data
 @Entity
-public class DataPipelineConf extends ManagedEntity
+public class DataPipeline extends ManagedEntity
 {
-    public DataPipelineConf() {
+    public DataPipeline() {
         this.pipelines = new ArrayList();
     }
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Pipeline> pipelines = null;
+    private List<Pipeline> pipelines;
     private final static long serialVersionUID = 3449967976714433108L;
 
 }
