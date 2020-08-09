@@ -28,15 +28,13 @@ public class CodeGenerationCounter implements CounterGenerator {
 
     @Override
     public BigInteger getCurrentValue(String context) {
-        map.computeIfAbsent(context, k -> BigInteger.ONE );
+        map.putIfAbsent(context, BigInteger.ZERO );
         return map.get(context);
     }
 
     @Override
     public boolean increment(String context) {
-        BigInteger nextValue = getCurrentValue(context).add(BigInteger.ONE);
-        map.put(context, nextValue);
-        return true;
+        return getNextValue(context) != null;
     }
 
     @Override
