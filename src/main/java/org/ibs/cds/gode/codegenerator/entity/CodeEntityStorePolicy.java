@@ -24,9 +24,9 @@ public class CodeEntityStorePolicy implements ResolvedFromModel<StatefulEntitySp
     private StorePolicy policy;
 
     public CodeEntityStorePolicy(StatefulEntitySpec statefulEntitySpec, BuildModel buildModel) {
-        this.policy = process(statefulEntitySpec, buildModel);
         this.model = statefulEntitySpec;
         this.buildModel = buildModel;
+        this.policy = process(statefulEntitySpec, buildModel);
     }
 
     public boolean isDynamicQueryAvailable(){
@@ -81,6 +81,6 @@ public class CodeEntityStorePolicy implements ResolvedFromModel<StatefulEntitySp
         if(state.getOpsLevel() != null){
             return new PersistenceDecision(state.getOpsLevel()).getStorePolicy();
         }
-        throw CodeGenerationFailure.SYSTEM_ERROR.provide("Store policy cannot be resolved");
+        throw CodeGenerationFailure.SYSTEM_ERROR.provide("Store policy cannot be resolved for"+model.getName());
     }
 }

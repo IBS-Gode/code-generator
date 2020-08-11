@@ -52,7 +52,7 @@ public enum LocalDeploymentRequirement {
     MONGODB_URI(requireMongoDB(), "MongoDB URI","mongoUri", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.mongodb.uri")),
 
-    MONGODB_DATABASE(requireMongoDB(), "MongoDB useername","mongoDatabaseName", FieldType.TEXT,
+    MONGODB_DATABASE(requireMongoDB(), "MongoDB username","mongoDatabaseName", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "gode.datastore.mongodb.database.name")),
 
     APP_PORT(always(), "Application port","appPort", FieldType.NUMBER,
@@ -114,6 +114,7 @@ public enum LocalDeploymentRequirement {
 
     TEAMS_NOTIFICATION_WEBHOOKS_URL(c -> true, "Teams Notification Webhooks Url","teamsWebhooksUrl", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.ADMIN, "spring.boot.admin.notify.slack.webhook-url")),
+
     CASSANDRA_PORT(requireCassandra(), "Cassandra port","cassandraPort", FieldType.TEXT,
             of(CodeGenerationComponent.ComponentName.APP, "spring.data.cassandra.port")),
 
