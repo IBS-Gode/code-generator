@@ -1,0 +1,36 @@
+{
+  "context": {
+    "handle": "string"
+  },
+  "data": {
+    "artifactId": 560,
+    "description": "TicketData",
+    "endNode": {
+      "entity": {
+        "artifactId" : 5
+      },
+      "role": "customerAccount"
+    },
+    "fields": [
+      {
+        "description": "string",
+        "name": "boughtData",
+        "type": "DATE"
+      },
+      {
+        "description": "Primary marking",
+        "name": "privilegedTicket",
+        "type": "BOOLEAN"
+      }
+    ],
+    "name": "TicketData",
+    "startNode": {
+      "entity": {
+        "artifactId" : 4
+      },
+      "role": "ticket"
+    },
+    "type": "ONE_TO_MANY",
+    "version": 2
+  }
+}

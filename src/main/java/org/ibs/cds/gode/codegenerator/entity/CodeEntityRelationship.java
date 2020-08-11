@@ -7,10 +7,7 @@ import org.ibs.cds.gode.codegenerator.config.CodeGenerationComponent;
 import org.ibs.cds.gode.codegenerator.model.build.BuildModel;
 import org.ibs.cds.gode.codegenerator.spec.StoreName;
 import org.ibs.cds.gode.entity.relationship.RelationshipType;
-import org.ibs.cds.gode.entity.type.RelationshipEntitySpec;
-import org.ibs.cds.gode.entity.type.RelationshipStorePolicy;
-import org.ibs.cds.gode.entity.type.Specification;
-import org.ibs.cds.gode.entity.type.StatefulEntitySpec;
+import org.ibs.cds.gode.entity.type.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +35,8 @@ public class CodeEntityRelationship extends Specification implements Buildable, 
         this.setName(spec.getName());
         this.viewName = this.getName().concat("View");
         this.startNode = new CodeEntityRelationshipNode();
-        StatefulEntitySpec startEntity = spec.getStartNode().getEntity();
-        StatefulEntitySpec endEntity = spec.getEndNode().getEntity();
+        RawEntitySpec startEntity = spec.getStartNode().getEntity();
+        RawEntitySpec endEntity = spec.getEndNode().getEntity();
         this.startNode.setEntityName(startEntity.getName());
         this.startNode.setEntityViewName(startEntity.getName().concat("View"));
         this.startNode.setRole(spec.getStartNode().getRole());

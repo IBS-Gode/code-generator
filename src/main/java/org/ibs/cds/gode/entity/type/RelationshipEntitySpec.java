@@ -1,15 +1,19 @@
 package org.ibs.cds.gode.entity.type;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.ibs.cds.gode.entity.relationship.RelationshipType;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Entity
-public class RelationshipEntitySpec extends Specification {
+public class RelationshipEntitySpec extends RawEntitySpec {
+    private final static IdField RELATIONSHIP_IDFIELD = new IdField();
+    static {
+        RELATIONSHIP_IDFIELD.setType(FieldType.NUMBER);
+        RELATIONSHIP_IDFIELD.setName("relationshipId");
+    }
     private RelationshipType type;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinTable(name="RStartNode")
@@ -17,10 +21,14 @@ public class RelationshipEntitySpec extends Specification {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinTable(name="REndNode")
     private RelationshipNode endNode;
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<EntityField> fields;
-
     public RelationshipEntitySpec() {
-        this.fields = new ArrayList<>();
+        super();
+        this.setIdField(RELATIONSHIP_IDFIELD);
+    }
+
+    @Override
+    @JsonIgnore
+    public IdField getIdField() {
+        return super.getIdField();
     }
 }
