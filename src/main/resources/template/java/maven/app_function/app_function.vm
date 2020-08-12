@@ -51,7 +51,7 @@ $Channel.put("${pipeline.name}sync", $pipeline.stateSynchroniser)
     key: ${pipeline.name}sync
 #if(${pipeline.isSuppliedFromEntity()})
 $Channel.put("${pipeline.name}pub", ${pipeline.supplierEntity})
-  - name: ${pipeline.supplierEntity}Publisher.java
+  - name: ${pipeline.supplierEntity.pipelineName}${pipeline.supplierEntity.entityName}Publisher.java
     path: ${DEFAULT__APP_DATAPIPELINE_PUBLISHER_DIRECTORY.pathOf($projectName, $type,$appFunctionName,$javaPath)}
     template: data_pipeline_publisher.vm
     buildable: false

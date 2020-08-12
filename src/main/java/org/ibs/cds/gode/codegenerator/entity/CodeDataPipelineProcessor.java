@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class CodeDataPipelineProcessor {
     private final String name;
+    private final String pipelineName;
     private final String from;
     private final String to;
 }

@@ -197,8 +197,8 @@ public class CodeGenerationTest {
         sink.setName("E4Sink");
 
         PipelineNode node2 = new PipelineNode();
-        node2.setMapTo("Entity3");
-        node2.setName("E2ToE3");
+        node2.setMapTo("Entity4");
+        node2.setName("E2ToE4");
         node2.setSink(sink);
 
         node1.setNext(node2);

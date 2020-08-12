@@ -30,6 +30,11 @@ public final class CodeApp extends Specification implements Buildable, CodeGener
     public CodeApp(App model, BuildModel buildModel) {
         this.buildModel = buildModel;
         this.model = model;
+        enrichComponents();
+        this.features = new CodeAppFeatures(this);
+    }
+
+    private void enrichComponents() {
         Map<Long, EntityStorePolicy> entityStorePolicyMap = resolveEntityStorePolicy(buildModel);
         this.entities = model.getEntities().stream().map(entity -> new CodeEntity(entity, buildModel, entityStorePolicyMap)).collect(Collectors.toSet());
         this.usage = model.getUsage();
@@ -55,8 +60,7 @@ public final class CodeApp extends Specification implements Buildable, CodeGener
         this.entities.stream().map(CodeEntityFunction::fromEntity).forEach(entityFunctions::add);
         this.dependencies.stream().map(CodeEntityFunction::fromEntity).forEach(entityFunctions::add);
         this.appFunction = new CodeAppFunctionNode(model, buildModel, entityFunctions);
-        this.dataPipelines = new CodeDataPipelines(model.getDatapipeline());
-        this.features = new CodeAppFeatures(this);
+        this.dataPipelines = new CodeDataPipelines(this.entities, model.getDatapipeline());
     }
 
     public Map<Long,EntityStorePolicy> resolveEntityStorePolicy(BuildModel buildModel){
