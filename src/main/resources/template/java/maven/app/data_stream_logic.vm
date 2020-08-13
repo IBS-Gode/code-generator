@@ -1,0 +1,17 @@
+package org.ibs.cds.gode.stream;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class StreamLogic extends GodeStreamLogic {
+
+
+    public StreamLogic() {
+        super();
+        #foreach($pipeline in $APP.dataPipelines.pipelines)
+            #foreach($processor in $pipeline.processors)
+             this.addProcessor("${QueueUtil.pipelineNode(${processor.pipelineName}, ${processor.from})}", "${QueueUtil.pipelineNode(${processor.pipelineName}, ${processor.to})}", ${processor.name}::new);
+            #end
+        #end
+    }
+}

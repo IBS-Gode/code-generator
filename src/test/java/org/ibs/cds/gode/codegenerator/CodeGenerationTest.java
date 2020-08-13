@@ -185,20 +185,20 @@ public class CodeGenerationTest {
         pipeline.setName("TestPipeline");
 
         PipelineSource source = new PipelineSource();
-        source.setEntity("Entity1");
+        source.setEntity("Entity2");
         source.setType(PipelineSourceType.SUPPLIER);
 
         PipelineNode node1 = new PipelineNode();
-        node1.setMapTo("Entity2");
-        node1.setName("E1ToE2");
+        node1.setMapTo("Entity4");
+        node1.setName("E2ToE4");
 
         PipelineSink sink = new PipelineSink();
-        sink.setEntity("Entity4");
-        sink.setName("E4Sink");
+        sink.setEntity("Entity1");
+        sink.setName("Entity1Sink");
 
         PipelineNode node2 = new PipelineNode();
-        node2.setMapTo("Entity4");
-        node2.setName("E2ToE4");
+        node2.setMapTo("Entity1");
+        node2.setName("E4ToE1");
         node2.setSink(sink);
 
         node1.setNext(node2);

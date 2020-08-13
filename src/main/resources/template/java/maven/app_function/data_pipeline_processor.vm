@@ -3,16 +3,8 @@ package org.ibs.cds.gode.stream;
 
 import ${DEFAULT__ENTITY_VIEW_DIRECTORY.value}.${process.from}View;
 import ${DEFAULT__ENTITY_VIEW_DIRECTORY.value}.${process.to}View;
-import org.springframework.stereotype.Component;
-import static org.ibs.cds.gode.util.QueueUtil.pipelineNode;
 
-@Component
 public class ${process.name} extends DataProcessor<${process.from}View, ${process.to}View> {
-
-
-    public ${process.name}() {
-        super(pipelineNode("${process.pipelineName}", "${process.from}"), pipelineNode("${process.pipelineName}", "${process.to}"));
-    }
 
     @Override
     public ${process.from}View process(${process.from}View data) {

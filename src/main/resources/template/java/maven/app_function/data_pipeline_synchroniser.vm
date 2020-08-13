@@ -11,6 +11,6 @@ import org.springframework.stereotype.Component;
 public class ${sync.name} extends QueueStateSynchroniser<${sync.entity}View> {
 
     public ${sync.name}(${sync.entity}Manager manager, QueueRepository queueRepository, DataPipeline dataPipeline) {
-        super("${sync.entity.toLowerCase()}", manager, queueRepository, dataPipeline);
+        super("${sync.entity.toLowerCase()}view", manager, queueRepository, dataPipeline);
     }
 }

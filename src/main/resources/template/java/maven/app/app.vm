@@ -52,3 +52,9 @@ configuration:
     template: liquibase_properties.vm
     buildable: false
 #end
+#if(${APP.features.datapipelineRequired})
+  - name: StreamLogic.java
+    path: ${DEFAULT__APP_DATAPIPELINE_DIRECTORY.pathOf($projectName, $type, $appName, $javaPath)}
+    template: data_stream_logic.vm
+    buildable: false
+#end
