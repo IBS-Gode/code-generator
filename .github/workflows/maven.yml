@@ -8,7 +8,6 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-    
 
 jobs:
   build:
@@ -22,5 +21,9 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.11
+    - name: Clone Gode-core
+      run: git clone https://github.com/ibs-gode/gode-core $GITHUB_WORKSPACE/gode-core
+    - name: Build Gode-core
+      run: mvn clean install --file $GITHUB_WORKSPACE/gode-core/pom.xml
     - name: Build with Maven
       run: mvn -B package --file pom.xml
