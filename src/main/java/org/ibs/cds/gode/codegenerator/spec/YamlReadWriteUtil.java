@@ -2,6 +2,7 @@ package org.ibs.cds.gode.codegenerator.spec;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import org.ibs.cds.gode.codegenerator.exception.CodeGenerationFailure;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
@@ -14,7 +15,7 @@ public class YamlReadWriteUtil {
     private final static ObjectMapper ymlMapper;
 
     static{
-        ymlMapper = new ObjectMapper(new YAMLFactory());
+        ymlMapper = new ObjectMapper(new YAMLFactory().enable(YAMLGenerator.Feature.MINIMIZE_QUOTES));
     }
 
     public static <T> T read(URL url, Class<T> className) throws IOException {
@@ -34,4 +35,10 @@ public class YamlReadWriteUtil {
             throw CodeGenerationFailure.SYSTEM_ERROR.provide(e);
         }
     }
+
+    public static void writeFile(File file, Object object) throws IOException {
+        ymlMapper.writeValue(file, object);
+
+    }
+
 }
