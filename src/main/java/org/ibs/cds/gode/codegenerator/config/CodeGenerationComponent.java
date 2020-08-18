@@ -15,7 +15,8 @@ public interface CodeGenerationComponent {
         APP_MIGRATION("liquibase.properties", false),
         PIPELINE(true),
         TEST_CASE(true),
-        ADMIN("application.properties", false);
+        ADMIN("application.properties", false),
+        DOCKER_COMPOSE("docker-compose.yml", false);
 
         private @Getter final String controlFile;
         private @Getter final String nature;
