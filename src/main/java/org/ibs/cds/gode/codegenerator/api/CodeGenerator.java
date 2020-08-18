@@ -94,6 +94,8 @@ public class CodeGenerator {
         switch (model.getType()) {
             case LOCAL:
                 return LocalDeploymentRequirement.values(app);
+            case DOCKER_IMG:
+                return  DockerDeploymentRequirement.values(app);
         }
         return Collections.emptyMap();
     }

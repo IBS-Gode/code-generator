@@ -4,11 +4,11 @@
 #if(${APP.features.jpaStoreRequired})
 #JPA
 gode.datastore.jpa.enabled=true
-gode.datastore.jpa.driver=
-gode.datastore.jpa.dialect=
-gode.datastore.jpa.datasource.url=
-gode.datastore.jpa.datasource.username=
-gode.datastore.jpa.datasource.password=
+gode.datastore.jpa.driver=com.mysql.cj.jdbc.Driver
+gode.datastore.jpa.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
+gode.datastore.jpa.datasource.url=jdbc\:mysql\://localhost\:3306/wynss_dev_r22
+gode.datastore.jpa.datasource.username=test
+gode.datastore.jpa.datasource.password=test
 gode.datastore.jpa.datasource.auto-schema-management=update
 
 #Liquibase
@@ -22,8 +22,8 @@ gode.datastore.jpa.enabled=false
 #if(${APP.features.mongoRequired})
 #Mongo
 gode.datastore.mongodb.enabled=true
-gode.datastore.mongodb.uri=
-gode.datastore.mongodb.database.name=
+gode.datastore.mongodb.uri=mongodb://dave:password@localhost:27017/
+gode.datastore.mongodb.database.name=myproject
 #else
 gode.datastore.mongodb.enabled=false
 #end

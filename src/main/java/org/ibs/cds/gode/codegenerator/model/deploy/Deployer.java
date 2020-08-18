@@ -43,6 +43,25 @@ public class Deployer {
                             BinaryStatus.SUCCESS);
                 }
                 return new LocalDeploymentComplete(null,null,BinaryStatus.FAILURE);
+            } else if(MapUtils.isNotEmpty(model.getDockerDeploymentRequired())){
+                if (updateDockerRequirement(app, model.getDockerDeploymentRequired())) {
+                    String pom = PathPackage.path(EngineConfiguration.getCodeGenPath(), app.getVersion().toString(), CodeAppUtil.containerAppName(app).toLowerCase(), CodeGenerationComponent.ComponentName.APP.getNature(), app.getName().toLowerCase(), "pom.xml");
+                    String adminPom = PathPackage.path(EngineConfiguration.getCodeGenPath(), app.getVersion().toString(), CodeAppUtil.containerAppName(app).toLowerCase(), CodeGenerationComponent.ComponentName.ADMIN.getNature(), CodeAppUtil.adminAppName(app).toLowerCase(), "pom.xml");
+                    CompletableFuture
+                            .supplyAsync(()->{
+                                log.info("Deployment started with args:{}",adminPom);
+                                return CodeDeployer.upLoadImage(app.getBuildModel(), adminPom);
+                            });
+                    CompletableFuture
+                            .supplyAsync(()->{
+                                log.info("Deployment started with args:{}",pom);
+                                return CodeDeployer.deployDocker(app.getBuildModel(), pom);
+                            });
+                    return new LocalDeploymentComplete(String.format(LOCAL_APP, localDeployment.get(LocalDeploymentRequirement.APP_PORT.getPropertyName())),
+                            String.format(LOCAL_ADMIN_APP, localDeployment.get(LocalDeploymentRequirement.ADMIN_PORT.getPropertyName()), CodeAppUtil.adminAppName(app).toLowerCase()),
+                            BinaryStatus.SUCCESS);
+                }
+                return new LocalDeploymentComplete(null,null,BinaryStatus.FAILURE);
             }
             throw CodeGenerationFailure.SYSTEM_ERROR.provide("Only local deployment is supported now");
         } catch (Exception e) {
@@ -54,5 +73,10 @@ public class Deployer {
         List<LocalDeploymentRequirement> requirement = localDeployment.entrySet().stream().map(k -> LocalDeploymentRequirement.from(k.getKey(), k.getValue(), app)).filter(Objects::nonNull).collect(Collectors.toList());
         String property = PathPackage.path(EngineConfiguration.getCodeGenPath(), app.getVersion().toString(), CodeAppUtil.containerAppName(app).toLowerCase());
         return PropertyUtil.update(property, requirement, app);
+    }
+    public static boolean updateDockerRequirement(CodeApp app, Map<String, String> dockerDeployment) {
+        List<DockerDeploymentRequirement> requirement = dockerDeployment.entrySet().stream().map(k -> DockerDeploymentRequirement.from(k.getKey(), k.getValue(), app)).filter(Objects::nonNull).collect(Collectors.toList());
+        String property = PathPackage.path(EngineConfiguration.getCodeGenPath(), app.getVersion().toString(), CodeAppUtil.containerAppName(app).toLowerCase());
+        return PropertyUtil.updateDockerProp(property, requirement, app);
     }
 }

@@ -12,18 +12,28 @@ import java.util.function.Function;
 public class Action {
     private final CodeGenerationComponent.ComponentName componentName;
     private final String property;
-    private final Function<LocalDeploymentRequirement, Function<CodeApp,String>> valueFunction;
+    private final Function<DeploymentRequirements, Function<CodeApp,String>> valueFunction;
+    private final Function<DeploymentRequirements, Function<CodeApp,String>> propertyFunction;
 
-    public String getValue(LocalDeploymentRequirement requirement, CodeApp app){
+    public String getValue(DeploymentRequirements requirement, CodeApp app){
         return valueFunction == null ? requirement.getValue() : valueFunction.apply(requirement).apply(app);
     }
-
-    public static Action of(CodeGenerationComponent.ComponentName componentName, String property, Function<LocalDeploymentRequirement, Function<CodeApp,String>> valueFunction){
-        return new Action(componentName, property, valueFunction);
+    public String getProperty(DeploymentRequirements requirement, CodeApp app){
+        return propertyFunction == null ? property : propertyFunction.apply(requirement).apply(app);
+    }
+    public static Action of(CodeGenerationComponent.ComponentName componentName, String property, Function<DeploymentRequirements, Function<CodeApp,String>> valueFunction){
+        return new Action(componentName, property, valueFunction, null);
+    }
+    public static Action of(CodeGenerationComponent.ComponentName componentName, String property, Function<DeploymentRequirements, Function<CodeApp,String>> valueFunction, Function<DeploymentRequirements, Function<CodeApp,String>> propertyFunction){
+        return new Action(componentName, property, valueFunction,propertyFunction);
     }
 
     public static Action of(CodeGenerationComponent.ComponentName componentName, String property){
-        return new Action(componentName, property, null);
+        return new Action(componentName, property, null, null);
+    }
+
+    public CodeGenerationComponent.ComponentName getComponentName(){
+        return componentName;
     }
 
 }
