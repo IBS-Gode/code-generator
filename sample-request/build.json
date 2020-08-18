@@ -47,6 +47,12 @@
           "artifactId" : 5
         },
         "storeName": "MYSQL"
+      },
+      {
+        "relationship": {
+          "artifactId" : 560
+        },
+        "storeName": "MYSQL"
       }
     ],
     "progLanguage": "JAVA",

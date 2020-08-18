@@ -14,6 +14,14 @@
     <packaging>pom</packaging>
     <version>$projectVersion</version>
 
+    <repositories>
+        <repository>
+            <id>github</id>
+            <name>GitHub ibs-gode Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/ibs-gode/gode-artifacts</url>
+        </repository>
+    </repositories>
+
     <profiles>
             <profile>
                 <id>testOnly</id>

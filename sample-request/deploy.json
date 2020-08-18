@@ -7,6 +7,9 @@
       "artifactId" : 2
     },
     "localDeploymentRequired": {
+      "teamsNotifyEnable": "false",
+      "mailNotifyEnable" : "false",
+      "slackNotifyEnable" : "false",
       "jpaDialect": "org.hibernate.dialect.MySQL5InnoDBDialect",
       "appPort": "9999",
       "jpaUrl": "jdbc:mysql://localhost:3306/wynss_dev_r22",

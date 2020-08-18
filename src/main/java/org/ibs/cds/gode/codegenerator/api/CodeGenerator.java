@@ -2,14 +2,16 @@ package org.ibs.cds.gode.codegenerator.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.io.FileUtils;
 import org.ibs.cds.gode.codegenerator.api.usage.CodeGeneratorApi;
 import org.ibs.cds.gode.codegenerator.entity.CodeApp;
+import org.ibs.cds.gode.codegenerator.entity.CodeAppUtil;
 import org.ibs.cds.gode.codegenerator.entity.StorePolicy;
 import org.ibs.cds.gode.codegenerator.ide.Terminal;
 import org.ibs.cds.gode.codegenerator.model.build.BuildComplete;
 import org.ibs.cds.gode.codegenerator.model.build.BuildModel;
 import org.ibs.cds.gode.codegenerator.model.build.Builder;
-import org.ibs.cds.gode.codegenerator.model.checkin.CheckInComplete;
+import org.ibs.cds.gode.codegenerator.model.checkin.CheckInManager;
 import org.ibs.cds.gode.codegenerator.model.deploy.*;
 import org.ibs.cds.gode.codegenerator.spec.StoreName;
 import org.ibs.cds.gode.entity.generic.DataMap;
@@ -23,19 +25,18 @@ import org.ibs.cds.gode.entity.type.App;
 import org.ibs.cds.gode.entity.type.BuildData;
 import org.ibs.cds.gode.entity.type.Specification;
 import org.ibs.cds.gode.exception.KnownException;
+import org.ibs.cds.gode.util.Assert;
 import org.ibs.cds.gode.web.Request;
 import org.ibs.cds.gode.web.Response;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
-import org.h2.store.fs.FileUtils;
-import org.ibs.cds.gode.codegenerator.entity.CodeAppUtil;
-import org.ibs.cds.gode.codegenerator.model.checkin.CheckInManager;
-import org.ibs.cds.gode.codegenerator.model.checkin.CheckInModel;
-import org.ibs.cds.gode.util.Assert;
 
 @CodeGeneratorApi
 @RequestMapping("/generator")
@@ -61,7 +62,7 @@ public class CodeGenerator {
     @ApiOperation(value = "Operation to design App")
     public Response<App> design(@RequestBody Request<App> appRequest) {
         App app = appRequest.getData();
-        FileUtils.deleteRecursive(CodeAppUtil.appPath(app), true);
+        FileUtils.deleteQuietly(new File(CodeAppUtil.appPath(app)));
         app.setCodeUrl(checkInManager.initialise(app));
         return Executor.run(Logic.savePure(), appRequest, appManager, KnownException.SAVE_FAILED, "/design");
     }

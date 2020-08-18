@@ -24,7 +24,6 @@ public class CodeField implements ResolvedFromModel<EntityField, LangObject> {
         Assert.notNull(field);
         this.object = process(field, buildModel);
         this.graphQLType = GraphQLUtil.getGrapQLType(field);
-        this.object = process(field, buildModel);
     }
 
     public LangObject process(EntityField field, BuildModel buildModel){

@@ -1,0 +1,18 @@
+#set($process = ${Channel.get($key)})
+package org.ibs.cds.gode.stream;
+
+import ${DEFAULT__ENTITY_VIEW_DIRECTORY.value}.${process.from}View;
+import ${DEFAULT__ENTITY_VIEW_DIRECTORY.value}.${process.to}View;
+
+public class ${process.name} extends DataProcessor<${process.from}View, ${process.to}View> {
+
+    @Override
+    public ${process.from}View process(${process.from}View data) {
+        return null;
+    }
+
+    @Override
+    public ${process.to}View transform(${process.from}View data) {
+        return null;
+    }
+}

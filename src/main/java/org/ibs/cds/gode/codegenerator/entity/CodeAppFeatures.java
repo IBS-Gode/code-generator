@@ -18,6 +18,7 @@ public class CodeAppFeatures {
     private final boolean queueSystemRequired;
     private final boolean secure;
     private final boolean autosequenceFields;
+    private final boolean datapipelineRequired;
 
     public CodeAppFeatures(CodeApp app) {
         this.cacheRequired = isCacheRequired(app);
@@ -36,6 +37,7 @@ public class CodeAppFeatures {
         this.elasticsearchRequired = app.getEntities().stream().anyMatch(k -> k.getStorePolicy().isAvailable() &&
                 k.getStorePolicy().getPolicy().getStoreName().getStoreType() == StoreType.ELASTICSEARCH);
         this.autosequenceFields = app.getEntities().stream().flatMap(k->k.getFields().stream()).anyMatch(CodeEntityField::isAutosequence);
+        this.datapipelineRequired = app.getDataPipelines() != null && CollectionUtils.isNotEmpty(app.getDataPipelines().getPipelines());
     }
 
     private boolean isCacheRequired(CodeApp app) {

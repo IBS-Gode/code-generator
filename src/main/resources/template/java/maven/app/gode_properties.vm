@@ -71,6 +71,10 @@ gode.queue.kafka.pollInterval=60
 gode.queue.kafka.security.sasl=
 gode.queue.kafka.security.mechanism=
 gode.queue.kafka.security.jaas=
+gode.queue.kafka.clientId=gode-${appName}-v.$appVersion
+gode.queue.kafka.appName=${appName}
+gode.queue.kafka.streamReplication=1
+gode.queue.kafka.activeProcessors=1
 #else
 gode.queue.kafka.enabled=false
 #end
@@ -119,3 +123,4 @@ management.metrics.export.prometheus.enabled=true
 spring.application.name=${appName}-v.$appVersion
 spring.boot.admin.client.url=${admin.url}
 management.endpoint.logfile.external-file=./logs/${appName}.log
+management.health.elasticsearch.enabled=false

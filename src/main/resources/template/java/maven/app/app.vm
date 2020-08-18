@@ -26,6 +26,12 @@ configuration:
     path: ${PathPackage.path($projectName, $type, $appName, $resourcePath)}
     template: gode_properties.vm
     buildable: false
+#if(${APP.features.datapipelineRequired})
+  - name: pipeline.yml
+    path: ${PathPackage.path($projectName, $type, $appName, $resourcePath)}
+    template: data_pipeline.vm
+    buildable: false
+#end
   - name: root.graphqls
     path: ${PathPackage.path($projectName, $type, $appName, $graphqlPath)}
     template: graphql.vm
@@ -50,3 +56,9 @@ configuration:
     path: ${PathPackage.path($projectName,$type, $appName)}
     template: entity_docker-compose.vm
     buildable: false
+#if(${APP.features.datapipelineRequired})
+  - name: StreamLogic.java
+    path: ${DEFAULT__APP_DATAPIPELINE_DIRECTORY.pathOf($projectName, $type, $appName, $javaPath)}
+    template: data_stream_logic.vm
+    buildable: false
+#end

@@ -9,10 +9,12 @@ import org.ibs.cds.gode.codegenerator.spec.StoreName;
 import org.ibs.cds.gode.entity.generic.AB;
 import org.ibs.cds.gode.entity.relationship.RelationshipType;
 import org.ibs.cds.gode.entity.type.*;
+import org.ibs.cds.gode.util.RandomUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CodeGenerationTest {
 
@@ -21,12 +23,20 @@ public class CodeGenerationTest {
         Assert.assertTrue("Code generation failed",testGenerate(app()));
     }
 
-    private static boolean testGenerate(AB<App, RelationshipEntitySpec> app ) {
 
-        RelationshipStorePolicy policy = new RelationshipStorePolicy();
-        policy.setStoreName(StoreName.MYSQL);
-        policy.setRelationship(app.getB());
-        policy.setAdditionalFields(List.of());
+    public static void main(String[] args) {
+        new CodeGenerationTest().basicTest();
+    }
+    private static boolean testGenerate(AB<App, List<RelationshipEntitySpec>> app ) {
+
+        List<RelationshipStorePolicy> policies = app.getB().stream().map(k->{
+            RelationshipStorePolicy policy = new RelationshipStorePolicy();
+            policy.setStoreName(StoreName.MYSQL);
+            policy.setRelationship(k);
+            policy.setAdditionalFields(List.of());
+            return policy;
+        }).collect(Collectors.toList());
+
 
         BuildModel model = new BuildModel();
         model.setProgLanguage(ProgLanguage.JAVA);
@@ -34,13 +44,13 @@ public class CodeGenerationTest {
         model.setApp(app.getA());
         model.setSecure(false);
         model.setPipelineGeneration(true);
-        model.setRelationshipStorePolicy(List.of(policy));
+        model.setRelationshipStorePolicy(policies);
 
         AppCodeGenerator appCodeGenerator = new AppCodeGenerator(app.getA(), model);
         return appCodeGenerator.generate();
     }
 
-    private static AB<App, RelationshipEntitySpec> app() {
+    private static AB<App, List<RelationshipEntitySpec>> app() {
         EntityField field = new EntityField();
         field.setName("name");
         field.setType(FieldType.TEXT);
@@ -151,7 +161,8 @@ public class CodeGenerationTest {
         statefulEntitySpec5.setState(state5);
 
         RelationshipEntitySpec relationshipEntitySpec = new RelationshipEntitySpec();
-        relationshipEntitySpec.setName("ParentCustomerRelationship");
+        relationshipEntitySpec.setArtifactId(RandomUtils.unique());
+        relationshipEntitySpec.setName("Entity1Entity2Relationship");
         relationshipEntitySpec.setType(RelationshipType.ONE_TO_MANY);
         RelationshipNode startNode = new RelationshipNode();
         startNode.setEntity(statefulEntitySpec);
@@ -163,6 +174,21 @@ public class CodeGenerationTest {
         relationshipEntitySpec.setEndNode(endNode);
         relationshipEntitySpec.setFields(List.of(of));
         relationshipEntitySpec.setVersion(8L);
+
+        RelationshipEntitySpec relationshipEntitySpec2 = new RelationshipEntitySpec();
+        relationshipEntitySpec2.setArtifactId(RandomUtils.unique());
+        relationshipEntitySpec2.setName("EntityToRelatnRelationship");
+        relationshipEntitySpec2.setType(RelationshipType.ONE_TO_MANY);
+        RelationshipNode startNode2 = new RelationshipNode();
+        startNode2.setEntity(statefulEntitySpec);
+        startNode2.setRole("entitySide");
+        RelationshipNode endNode2 = new RelationshipNode();
+        endNode2.setEntity(relationshipEntitySpec);
+        endNode2.setRole("relatnSide");
+        relationshipEntitySpec2.setStartNode(startNode2);
+        relationshipEntitySpec2.setEndNode(endNode2);
+        relationshipEntitySpec2.setFields(List.of(of));
+        relationshipEntitySpec2.setVersion(9L);
 
         AppFunction function = new AppFunction();
         function.setMethodName("method1");
@@ -180,13 +206,43 @@ public class CodeGenerationTest {
                 new AppFuncArgument(statefulEntitySpec2, "arg2")
         ));
 
+        DataPipeline dataPipeline = new DataPipeline();
+        Pipeline pipeline = new Pipeline();
+        pipeline.setName("TestPipeline");
+
+        PipelineSource source = new PipelineSource();
+        source.setEntity("Entity2");
+        source.setType(PipelineSourceType.SUPPLIER);
+
+        PipelineNode node1 = new PipelineNode();
+        node1.setMapTo("Entity4");
+        node1.setName("E2ToE4");
+
+        PipelineSink sink = new PipelineSink();
+        sink.setEntity("Entity1");
+        sink.setName("Entity1Sink");
+
+        PipelineNode node2 = new PipelineNode();
+        node2.setMapTo("Entity1");
+        node2.setName("E4ToE1");
+        node2.setSink(sink);
+
+        node1.setNext(node2);
+
+        source.setNext(node1);
+
+        pipeline.setSource(source);
+        dataPipeline.setPipelines(List.of(pipeline));
+
         App app = new App();
+        app.setDatapipeline(dataPipeline);
         app.setName("App1");
         app.setDescription("App1 description");
         app.setVersion(10L);
         app.setEntities(List.of(statefulEntitySpec, statefulEntitySpec2, statefulEntitySpec3, statefulEntitySpec4, statefulEntitySpec5));
         app.setFunctions(List.of(function, function2));
-        app.setRelationships(List.of(relationshipEntitySpec));
-        return AB.of(app, relationshipEntitySpec);
+        List<RelationshipEntitySpec> relationshipEntitySpecs = List.of(relationshipEntitySpec, relationshipEntitySpec2);
+        app.setRelationships(relationshipEntitySpecs);
+        return AB.of(app, relationshipEntitySpecs);
     }
 }

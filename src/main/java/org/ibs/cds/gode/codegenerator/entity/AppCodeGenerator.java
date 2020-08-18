@@ -11,6 +11,7 @@ import org.ibs.cds.gode.codegenerator.velocity.VelocityGeneratorEngine;
 import org.ibs.cds.gode.entity.store.StoreType;
 import org.ibs.cds.gode.entity.type.App;
 import org.ibs.cds.gode.status.BinaryStatus;
+import org.ibs.cds.gode.util.QueueUtil;
 import org.ibs.cds.gode.utils.RelationshipUtils;
 import org.ibs.cds.gode.utils.StoreUtils;
 
@@ -109,6 +110,7 @@ public class AppCodeGenerator {
             generatorEngine.addToContext("CodeAppUtil", CodeAppUtil.class);
             generatorEngine.addToContext("StoreType", StoreType.class);
             generatorEngine.addToContext("DeploymentRequirement", DeploymentRequirement.class);
+            generatorEngine.addToContext("QueueUtil", QueueUtil.class);
             Stream.of(PathPackage.values()).forEach(pathPackage -> generatorEngine.addToContext(pathPackage.name(), pathPackage));
         });
 

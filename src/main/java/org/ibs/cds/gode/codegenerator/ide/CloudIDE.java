@@ -17,8 +17,8 @@ public class CloudIDE {
 
     private final String publicIp;
     
-    public CloudIDE() throws IOException{
-        this.publicIp = "http://"+ NetworkUtil.publicIP() + ":";
+    public CloudIDE(){
+        this.publicIp = "http://localhost:";
     }
     
     public String runIDE(String path, String port) {

@@ -25,6 +25,10 @@ public enum PathPackage {
     DEFAULT__ENTITY_FUNCTION_DIRECTORY(DEFAULT__ENTITY_DIRECTORY.getValue().concat(".function"), true),
     DEFAULT__ENTITY_QUERY_DIRECTORY(DEFAULT__ENTITY_DIRECTORY.getValue().concat(".query"), true),
 
+    DEFAULT__APP_DATAPIPELINE_DIRECTORY(DEFAULT_DIRECTORY.getValue().concat(".stream"),true),
+    DEFAULT__APP_DATAPIPELINE_SYNC_DIRECTORY(DEFAULT__APP_DATAPIPELINE_DIRECTORY.getValue().concat(".synchroniser"),true),
+    DEFAULT__APP_DATAPIPELINE_PUBLISHER_DIRECTORY(DEFAULT__APP_DATAPIPELINE_DIRECTORY.getValue().concat(".publisher"),true),
+
     DEFAULT__APP_DIRECTORY(DEFAULT_DIRECTORY.getValue().concat(".app"),true),
     DEFAULT__APP_FUNCTION_DIRECTORY(DEFAULT__APP_DIRECTORY.getValue().concat(".function"),true),
     DEFAULT_GROUP_ID("org.ibs.cds.gode",false);

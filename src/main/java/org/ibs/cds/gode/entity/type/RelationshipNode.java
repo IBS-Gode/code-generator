@@ -10,5 +10,5 @@ import javax.persistence.ManyToOne;
 public class RelationshipNode extends ManagedEntity{
     private String role;
     @ManyToOne
-    private StatefulEntitySpec entity;
+    private RawEntitySpec entity;
 }

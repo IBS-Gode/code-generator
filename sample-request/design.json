@@ -105,6 +105,9 @@
     "relationships": [
       {
         "artifactId" : 5
+      },
+      {
+        "artifactId" : 560
       }
     ],
     "name": "CustomerCare",
