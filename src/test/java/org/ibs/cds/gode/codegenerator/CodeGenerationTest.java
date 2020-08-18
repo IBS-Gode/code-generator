@@ -206,7 +206,36 @@ public class CodeGenerationTest {
                 new AppFuncArgument(statefulEntitySpec2, "arg2")
         ));
 
+        DataPipeline dataPipeline = new DataPipeline();
+        Pipeline pipeline = new Pipeline();
+        pipeline.setName("TestPipeline");
+
+        PipelineSource source = new PipelineSource();
+        source.setEntity("Entity2");
+        source.setType(PipelineSourceType.SUPPLIER);
+
+        PipelineNode node1 = new PipelineNode();
+        node1.setMapTo("Entity4");
+        node1.setName("E2ToE4");
+
+        PipelineSink sink = new PipelineSink();
+        sink.setEntity("Entity1");
+        sink.setName("Entity1Sink");
+
+        PipelineNode node2 = new PipelineNode();
+        node2.setMapTo("Entity1");
+        node2.setName("E4ToE1");
+        node2.setSink(sink);
+
+        node1.setNext(node2);
+
+        source.setNext(node1);
+
+        pipeline.setSource(source);
+        dataPipeline.setPipelines(List.of(pipeline));
+
         App app = new App();
+        app.setDatapipeline(dataPipeline);
         app.setName("App1");
         app.setDescription("App1 description");
         app.setVersion(10L);

@@ -39,7 +39,7 @@ public class ${entityGivenName}Manager extends EntityViewManager<${entityGivenNa
 
     #if($entityStored && $entityCached)
     public ${entityGivenName}Manager(${entityGivenName}StoreRepository stateRespository, ${entityGivenName}CacheRepository cacheRespository,QueueRepository queueRepository) {
-        super("${entityName}", stateRespository, cacheRespository,queueRepository);
+        super("${entityName}view", stateRespository, cacheRespository,queueRepository);
     }
     #elseif($entityStored)
     public ${entityGivenName}Manager(${entityGivenName}StoreRepository stateRespository, QueueRepository queueRepository) {

@@ -23,6 +23,9 @@ public class App extends Specification {
     @ManyToMany
     @JoinTable(name = "AppRelationships")
     private List<RelationshipEntitySpec> relationships;
+    @OneToOne
+    @JoinTable(name = "AppDataPipeline")
+    private DataPipeline datapipeline;
 
     private String codeUrl;
     public App() {
