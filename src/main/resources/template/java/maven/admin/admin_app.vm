@@ -16,3 +16,4 @@ configuration:
     path: ${PathPackage.path($projectName, $type, $adminAppName, $CodeAppUtil.javaResourcePath())}
     template: application_properties.vm
     buildable: false
+

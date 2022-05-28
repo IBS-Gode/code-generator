@@ -51,4 +51,14 @@ public class MavenBind implements ArtefactBinding, CodeDeployer {
     public BinaryStatus deploy(String deployConfig) {
         return BinaryStatus.valueOf(runWithOpts(deployConfig, null ,"spring-boot:run"));
     }
+
+    @Override
+    public BinaryStatus upLoadImage(String deployConfig) {
+        return BinaryStatus.valueOf(runWithOpts(deployConfig, null ,"clean","install","docker:build"));
+    }
+
+    @Override
+    public BinaryStatus runDockerCompose(String deployConfig) {
+        return BinaryStatus.valueOf(runWithOpts(deployConfig, null ,"clean","install","docker:build", "docker-compose:up"));
+    }
 }
