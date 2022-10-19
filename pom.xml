@@ -27,7 +27,7 @@
         <servlet-api.version>4.0.1</servlet-api.version>
         <gode.version>1.0-SNAPSHOT</gode.version>
         <maven.invoker>3.0.1</maven.invoker>
-        <jackson.version>2.12.1</jackson.version>
+        <jackson.version>2.13.4.1</jackson.version>
         <lombok.version>1.18.12</lombok.version>
         <velocity.version>1.7</velocity.version>
         <velocity.tools.version>2.0</velocity.tools.version>
