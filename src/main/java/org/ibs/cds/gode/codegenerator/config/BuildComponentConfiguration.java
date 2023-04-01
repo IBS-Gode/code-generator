@@ -31,7 +31,7 @@ public interface BuildComponentConfiguration {
         return path.add(CONFIG_PATH).add(model.getProgLanguage().toString()).add(model.getArtifactPackaging().toString()).add(CONFIG_FILE).toString();
     }
 
-    static String getComponentTemplatePath(BuildModel model,CodeGenerationComponent component){
+    static String getComponentTemplatePath(BuildModel model, CodeGenerationComponent component){
         StringJoiner path = new StringJoiner(File.separator);
         return path
                 .add(TEMPLATE_PATH)
